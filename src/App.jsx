@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Heart, ChevronRight, ChevronLeft } from 'lucide-react';
 
 const TARGET_DATE_MS = new Date('2026-03-14T00:00:00+05:30').getTime();
 
@@ -54,7 +54,7 @@ const RoyalLetter = () => {
       {stage === 'flying' && (
         <div className="flex flex-col items-center justify-center animate-fade-in w-full max-w-4xl p-4">
           <h2 className={`text-xl md:text-2xl ${theme.goldText} mb-8 tracking-widest uppercase text-center font-bold`}>
-            Dispatched: To My Dearest Patient
+            Special Dispatch: 100 Days of Us
           </h2>
           <div className={`relative w-full h-48 md:h-64 border-t border-b ${theme.gold}/30 flex items-center justify-between px-4 md:px-10`}>
             <div className="z-10 flex flex-col items-center">
@@ -71,7 +71,7 @@ const RoyalLetter = () => {
               <span className={`mt-2 ${theme.goldText} text-xs md:text-sm tracking-widest`}>INDIA</span>
             </div>
           </div>
-          <p className={`mt-8 ${theme.goldText} animate-pulse italic`}>A healing breeze is on its way...</p>
+          <p className={`mt-8 ${theme.goldText} animate-pulse italic`}>A century of days, a lifetime to go... </p>
         </div>
       )}
 
@@ -79,7 +79,7 @@ const RoyalLetter = () => {
       {stage === 'arrived' && (
         <div className="z-50 animate-bounce cursor-pointer p-4 flex flex-col items-center" onClick={() => setStage('sealed')}>
           <div className={`w-64 h-40 bg-[#f3e5ab] border-2 ${theme.gold} shadow-2xl flex items-center justify-center relative transform hover:scale-105 transition-transform duration-500`}>
-            <span className={`${theme.goldText} font-bold tracking-widest`}>FOR YOUR EYES ONLY</span>
+            <span className={`${theme.goldText} font-bold tracking-widest`}>A ROYAL MILESTONE</span>
           </div>
           <p className={`text-center mt-6 ${theme.wineText} text-sm tracking-widest uppercase`}>Click to Open</p>
         </div>
@@ -133,35 +133,35 @@ const RoyalLetter = () => {
 
             <div className="p-8 md:p-12">
               {/* PAGE 1: The Care Message */}
+              {/* PAGE 1: The Milestone Headline */}
               {page === 1 && (
-                <div className="animate-fade-in">
-                  <div className={`flex justify-between ${theme.wineText} text-[10px] uppercase tracking-widest mb-8 border-b ${theme.gold} pb-4 font-bold`}>
-                    <span>A Letter of Recovery</span>
-                    <span>Page 01</span>
+                <div className="animate-fade-in text-center py-10">
+                  <div className={`mb-6 flex justify-center ${theme.wineText}`}>
+                    <Heart fill="#722f37" size={48} className="animate-pulse" />
                   </div>
-                  <div className="font-script text-2xl md:text-3xl leading-relaxed text-[#2c2c2c] text-left">
-                    <p className="mb-6"><span className={`text-5xl ${theme.wineText} font-serif font-bold`}>M</span>y Dearest,</p>
-                    <p className="mb-4">It breaks my heart to hear of the pain you've endured yesterday. I wish more than anything that I could have been there to hold your hand through the hospital visit and the sting of that injection.</p>
-                    <p className="mb-4">Please, my love, promise me you will take every moment you need to recover. Rest that foot, keep your spirits high, and know that I am sending every ounce of my strength across the miles to ease your pain.</p>
-                  </div>
-                  <button onClick={() => setPage(2)} className={`mt-8 flex items-center gap-2 ${theme.wineText} font-bold hover:underline ml-auto`}>
-                    Read more <ChevronRight size={18} />
+                  <h1 className={`text-4xl md:text-5xl ${theme.wineText} font-script mb-4`}>100 Days of Promise</h1>
+                  <p className={`text-xs uppercase tracking-[0.3em] ${theme.goldText} mb-8`}>A Century of Shared Moments</p>
+                  <div className={`w-24 h-px ${theme.gold} mx-auto mb-8`}></div>
+                  <p className="italic text-gray-600 mb-10">"A promise made in the heart is a compass that always points in loving you."</p>
+
+                  <button onClick={() => setPage(2)} className={`mx-auto flex items-center gap-2 ${theme.wineText} font-bold hover:underline`}>
+                    Open the Message <ChevronRight size={18} />
                   </button>
                 </div>
               )}
 
-              {/* PAGE 2: The Trust & Love Message */}
               {page === 2 && (
                 <div className="animate-fade-in">
                   <div className={`flex justify-between ${theme.wineText} text-[10px] uppercase tracking-widest mb-8 border-b ${theme.gold} pb-4 font-bold`}>
-                    <span>My Sincerest Truth</span>
-                    <span>Page 02</span>
+                    <span>Day 100: A Vow Reaffirmed</span>
+                    <span>Mumbai & Dublin</span>
                   </div>
                   <div className="font-script text-2xl md:text-3xl leading-relaxed text-[#2c2c2c] text-left">
-                    <p className="mb-4">I miss your face—every single part of it. I want you to know that it kills me to think you feel you must hide from me when you aren't feeling your best.</p>
-                    <p className="mb-4">Whether your eyes are tired, or your face looks "puffy" as you say, or you are worn down by illness—I love seeing you in every state you are in. You are beautiful to me not because of perfection, but because you are <strong>you</strong>.</p>
-                    <p className="mb-6">Please trust me to love you regardless of how you look or feel. You never have to hide from me again. I just want to see you.</p>
-                    <p className="text-right">With all my love,<br /><span className={`${theme.wineText} font-bold`}>Soon to be Husband 💖</span></p>
+                    <p className="mb-6"><span className={`text-5xl ${theme.wineText} font-serif font-bold`}>M</span>y Darling,</p>
+                    <p className="mb-4">As we mark our 100th day of this beautiful promise, my thoughts are only of your recovery. I wish I could be there to ease your pain and hold you close while you heal.</p>
+                    <p className="mb-4">I miss your face more than words can say.</p>
+                    <p className="mb-6">I love you dearly, I miss you, and I am counting every second until March 14th.</p>
+                    <p className="text-right">Yours Forever,<br /><span className={`${theme.wineText} font-bold`}>Siddhesh</span></p>
                   </div>
                   <button onClick={() => setPage(1)} className={`mt-8 flex items-center gap-2 ${theme.goldText} text-xs uppercase tracking-widest hover:text-[#722f37]`}>
                     <ChevronLeft size={14} /> Back to Page 1
