@@ -1,49 +1,79 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronRight, ChevronLeft, Heart, Sparkles, PenTool } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Sparkles, Star, Moon } from 'lucide-react';
+
+const START_DATE_MS = new Date('2025-10-26T00:00:00+05:30').getTime();
+const TARGET_DATE_MS = new Date('2026-03-14T00:00:00+05:30').getTime();
+const TOTAL_DURATION_MS = TARGET_DATE_MS - START_DATE_MS;
+const REVEAL_START_MINUTE_IST = 13 * 60 + 45;
+const REVEAL_END_MINUTE_IST = 14 * 60 + 20;
+const IST_TIME_FORMATTER = new Intl.DateTimeFormat('en-IN', {
+  timeZone: 'Asia/Kolkata',
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false,
+});
 
 const RoyalLetter = () => {
   const [stage, setStage] = useState('journey');
   const [page, setPage] = useState(0);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [daysPast, setDaysPast] = useState(0);
-  const [hearts, setHearts] = useState([]);
+  const [stars, setStars] = useState([]);
   const [progress, setProgress] = useState(0);
 
-  const startDate = new Date('2025-10-26T00:00:00+05:30');
-  const targetDate = new Date('2026-03-14T00:00:00+05:30');
-  const totalDuration = targetDate - startDate;
-
-  // --- NEW CONTENT ---
   const pages = [
     {
-      title: "Our Echoes",
-      type: "dialogue",
-      content: `Hey soon to be wifey, 
+      title: "Part I: Gravity",
+      icon: "🌌",
+      content: `My love for you feels like standing beneath a sky full of galaxies — aware of how small I am, yet certain of what I am drawn toward.
 
-It's so calming and grounded and majestic about the names you suggested for our kids and I couldn't agree more to it. 
+In a universe filled with wandering planets and silent vacuum, you are the gravity that steadies me. Not a black hole that consumes, but a sun that gives direction.
 
-I loved it instantly and solidified itself on how we could call them, how it would be heard, how the echos of their names will be resonating in our home. When I heard the Eraya name as you suggested for your brand I was like that should be our daughter's name and then before we could be discuss it was lovingly said and agreed by our heart. 
-
-Tell me what was our son's name again...`
+I have always admired the cosmos — its event horizons, its dwarf planets, its mysteries that refuse to be rushed. And loving you feels similar. 
+Not something to conquer, but something to approach with respect, curiosity, and patience.`
     },
     {
-      title: "The Heart of Us",
-      type: "heart-cloud",
-      words: [
-        "Love", "Affection", "Respect", "Understanding", "Communication", "Passion",
-        "Companion", "Partner", "Attention", "Motivation", "Lover", "Supporter",
-        "Cherisher", "Trust", "Faith", "Belief", "Honest", "Fruitful", "Horny",
-        "Admirer", "Sculptor", "Comfort", "Nurturer", "Carer", "Home", "Safe",
-        "Secure", "Honour", "Muse", "Melody", "Dreamer", "Soul", "Ambitions",
-        "Achiever", "Growth", "Objectifier", "Universe", "Pride", "Joy"
-      ]
+      title: "Part II: Principle",
+      icon: "🪐",
+      content: `With you, I am not lost in space. I am anchored. I want to be the kind of man whose presence feels like home — strong without arrogance, gentle without weakness, a gentleman not by performance, but by principle.
+
+I want to nurture what we build the way astronomers study distant exoplanets — carefully, attentively, always in awe of what is possible. 
+
+To communicate openly, like light traveling across years just to reach its destination. To stand beside you with pride, not possession. To admire you without diminishing myself.`
+    },
+    {
+      title: "Part III: The Orbit",
+      icon: "🌓",
+      content: `You deserve a love that is expansive yet steady — one that dreams of galaxies but still remembers to hold your hand on earth.
+
+If life is a vast, unknown universe, then let us become our own small solar system — balanced, warm, and alive with movement. Not perfect. Not dramatic. But real.
+
+And I would be honored to call you my wife — to orbit each other not out of obligation, but by choice, every single day.`
+    },
+    {
+      title: "Yours Infinite Gentleman",
+      icon: "✨",
+      content: `My heart is a telescope,
+Fixed only on your light,
+A gentleman's devotion,
+Through the vacuum of the night.
+
+No vacuum can extinguish,
+The warmth you bring to me,
+My love is not a theory,
+It's our soul's discovery.
+
+To the edges of the universe,
+And the simple path we tread,
+I'll be the home you return to,
+In the cosmic years ahead.`
     }
   ];
 
   useEffect(() => {
     const timer = setInterval(() => {
-      const now = new Date();
-      const difference = targetDate - now;
+      const nowMs = Date.now();
+      const difference = TARGET_DATE_MS - nowMs;
       if (difference > 0) {
         setTimeLeft({
           days: Math.floor(difference / (1000 * 60 * 60 * 24)),
@@ -52,210 +82,231 @@ Tell me what was our son's name again...`
           seconds: Math.floor((difference / 1000) % 60),
         });
       }
-      const timeSinceStart = now - startDate;
+      const timeSinceStart = nowMs - START_DATE_MS;
       setDaysPast(Math.floor(timeSinceStart / (1000 * 60 * 60 * 24)));
-      setProgress(Math.min(100, Math.max(0, (timeSinceStart / totalDuration) * 100)));
+      setProgress(Math.min(100, Math.max(0, (timeSinceStart / TOTAL_DURATION_MS) * 100)));
     }, 1000);
     return () => clearInterval(timer);
   }, []);
 
   useEffect(() => {
     if (stage === 'journey') {
-      const timer = setTimeout(() => setStage('arrived'), 7000);
+      const timer = setTimeout(() => setStage('arrived'), 11000);
       return () => clearTimeout(timer);
     }
   }, [stage]);
 
-  const triggerConfetti = () => {
-    const newHearts = Array.from({ length: 15 }).map((_, i) => ({
+  const triggerStarPulse = () => {
+    const newStars = Array.from({ length: 20 }).map((_, i) => ({
       id: Date.now() + i,
       left: Math.random() * 100,
-      animationDuration: 1.5 + Math.random() * 2,
-      delay: Math.random() * 0.5,
-      char: ['❤️', '✨', '🍼', '💍'][Math.floor(Math.random() * 4)]
+      top: Math.random() * 100,
+      animationDuration: 1.2 + Math.random() * 1.5,
+      delay: Math.random() * 0.3,
+      char: ['✨', '⭐', '🌟', '💫'][Math.floor(Math.random() * 4)]
     }));
-    setHearts(prev => [...prev, ...newHearts]);
-    setTimeout(() => setHearts(prev => prev.filter(h => h.id < Date.now())), 3000);
+    setStars(prev => [...prev, ...newStars]);
+    setTimeout(() => setStars(prev => prev.filter(s => s.id < Date.now())), 3000);
   };
 
-  const nextPage = () => { setPage(prev => prev + 1); triggerConfetti(); };
+  const nextPage = () => { setPage(prev => prev + 1); triggerStarPulse(); };
   const prevPage = () => setPage(prev => prev - 1);
 
-  const theme = { bg: "bg-[#fdf6e3]", gold: "border-[#d4af37]", goldText: "text-[#d4af37]", wine: "bg-[#722f37]", wineText: "text-[#722f37]" };
+  const theme = {
+    bg: "bg-[#050510]",
+    card: "bg-[#0b0c16]/90 backdrop-blur-xl",
+    border: "border-[#d4af37]/40",
+    goldText: "text-[#d4af37]",
+    silverText: "text-[#e2e8f0]",
+    accent: "text-[#8b9bb4]"
+  };
+
+  const currentRadius = 130 - (progress * 1.3);
+  const currentRotation = progress * 14.4;
+  const currentIstTime = IST_TIME_FORMATTER.formatToParts(new Date());
+  const istHour = Number(currentIstTime.find((part) => part.type === 'hour')?.value ?? 0);
+  const istMinute = Number(currentIstTime.find((part) => part.type === 'minute')?.value ?? 0);
+  const istMinuteOfDay = istHour * 60 + istMinute;
+  const isPoemRevealWindow =
+    istMinuteOfDay >= REVEAL_START_MINUTE_IST && istMinuteOfDay <= REVEAL_END_MINUTE_IST;
+  const isFinalPoemPage = page === pages.length;
+  const isFinalPoemLocked = isFinalPoemPage && !isPoemRevealWindow;
+  const minutesUntilNextReveal =
+    istMinuteOfDay < REVEAL_START_MINUTE_IST
+      ? REVEAL_START_MINUTE_IST - istMinuteOfDay
+      : 24 * 60 - istMinuteOfDay + REVEAL_START_MINUTE_IST;
+  const revealCountdown = `${Math.floor(minutesUntilNextReveal / 60)}h ${minutesUntilNextReveal % 60}m`;
+  const lockedPoemPreview = `My heart is a telescope,
+Fixed only on your light,
+.....................
+.....................
+
+No vacuum can extinguish,
+.....................
+.....................
+.....................
+
+To the edges of the universe,
+.....................
+.....................
+.....................`;
 
   return (
-    <div className={`min-h-screen w-full flex flex-col items-center justify-center ${theme.bg} overflow-hidden relative font-serif`}>
-      <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'url("https://www.transparenttextures.com/patterns/cream-paper.png")' }}></div>
+    <div className={`min-h-screen w-full flex flex-col items-center justify-center ${theme.bg} overflow-hidden relative star-bg font-sans text-white`}>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-indigo-950/40 via-[#050510]/95 to-[#050510] pointer-events-none z-0"></div>
 
-      {/* CONFETTI */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 60 }}>
-        {hearts.map(heart => (
-          <div key={heart.id} className="absolute top-[-20px] text-2xl animate-fall" style={{ left: `${heart.left}%`, animationDuration: `${heart.animationDuration}s`, animationDelay: `${heart.delay}s` }}>{heart.char}</div>
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-[60]">
+        {stars.map(star => (
+          <div key={star.id} className="absolute text-xl animate-star-pulse" style={{ left: `${star.left}%`, top: `${star.top}%`, animationDuration: `${star.animationDuration}s`, animationDelay: `${star.delay}s` }}>{star.char}</div>
         ))}
       </div>
 
-      {/* STAGE 1: JOURNEY */}
       {stage === 'journey' && (
-        <div className="flex flex-col items-center justify-center animate-fade-in w-full max-w-3xl p-6">
-          <h2 className={`${theme.wineText} text-2xl mb-16 tracking-widest uppercase font-bold text-center`}>The Path to Us</h2>
-          <div className="relative w-full h-1 bg-[#dcc694]/40 rounded-full">
-            <div className="absolute top-0 left-0 h-full bg-[#722f37] transition-all duration-[4000ms]" style={{ width: `${progress}%` }}></div>
-            <div className="absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2 transition-all duration-[4000ms] z-20" style={{ left: `${progress}%` }}>
-              <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-[#722f37] text-white text-[10px] px-2 py-1 rounded-full whitespace-nowrap">Day {daysPast}</div>
-              <div className="text-4xl animate-bounce-walk">🤵</div>
+        <div className="flex flex-col items-center justify-center animate-fade-in w-full max-w-3xl p-6 z-10">
+          <h2 className={`${theme.silverText} text-xl mb-24 tracking-[0.4em] uppercase font-light text-center`}>Orbiting Towards You</h2>
+          <div className="relative w-64 h-64 flex items-center justify-center">
+            <div className="absolute inset-0 border border-white/10 rounded-full animate-[spin_90s_linear_infinite]"></div>
+            <div className="absolute inset-12 border border-white/10 rounded-full border-dashed animate-[spin_60s_linear_infinite_reverse]"></div>
+            <div className="absolute w-24 h-24 rounded-full bg-[radial-gradient(circle,_rgba(147,51,234,0.45)_0%,_rgba(76,29,149,0.15)_40%,_rgba(0,0,0,0)_75%)] animate-pulse"></div>
+            <div className="absolute w-14 h-14 rounded-full border-2 border-[#d4af37]/70 animate-[spin_6s_linear_infinite]"></div>
+            <div className="absolute w-8 h-8 rounded-full border border-white/50 animate-[spin_3s_linear_infinite_reverse]"></div>
+            <div className="z-10 text-[10px] tracking-[0.2em] uppercase text-[#d4af37]">Wormhole</div>
+            <div className="absolute transition-all duration-[7000ms] ease-out z-20" style={{ transform: `rotate(${currentRotation}deg) translateX(${currentRadius}px) rotate(-${currentRotation}deg)` }}>
+              <div className="relative">
+                <div className="text-3xl">🚀</div>
+                <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-black/80 border border-[#d4af37]/40 text-[#d4af37] text-[9px] px-3 py-1 rounded-full whitespace-nowrap tracking-widest">Day {daysPast}</div>
+              </div>
             </div>
-            <div className="absolute top-1/2 right-0 transform -translate-y-1/2 translate-x-1/2 text-4xl opacity-30">👰</div>
           </div>
         </div>
       )}
 
-      {/* STAGE 2: ARRIVED */}
       {stage === 'arrived' && (
         <div className="z-50 animate-bounce cursor-pointer p-4 flex flex-col items-center" onClick={() => setStage('sealed')}>
-          <div className={`w-64 h-40 bg-[#f3e5ab] border-2 ${theme.gold} shadow-2xl flex items-center justify-center relative`}>
-            <span className={`${theme.goldText} font-bold tracking-widest`}>A MESSAGE FOR YOU</span>
+          <div className={`w-64 h-40 ${theme.card} border ${theme.border} flex items-center justify-center relative rounded-lg shadow-[0_0_30px_rgba(212,175,55,0.1)]`}>
+            <span className={`${theme.goldText} font-light tracking-[0.3em] text-[11px] text-center px-6`}>A TRANSMISSION FROM THE STARS</span>
           </div>
-          <p className={`mt-6 ${theme.wineText} text-sm uppercase tracking-widest`}>Click to Open</p>
+          <p className={`mt-8 ${theme.accent} text-[10px] uppercase tracking-[0.4em] animate-pulse`}>Tap to Receive</p>
         </div>
       )}
 
-      {/* STAGE 3: SEALED */}
       {stage === 'sealed' && (
-        <div className="relative animate-fade-in-up flex flex-col items-center">
-          <div className="mb-8 text-center">
-            <p className={`text-xl ${theme.wineText} font-script mb-2`}>Counting the heartbeats until we meet...</p>
-            <div className={`flex gap-4 ${theme.wineText} font-bold text-3xl`}>
-              <span>{timeLeft.days}d</span><span>:</span><span>{timeLeft.hours}h</span><span>:</span><span>{timeLeft.minutes}m</span><span>:</span><span>{timeLeft.seconds}s</span>
+        <div className="relative animate-fade-in-up flex flex-col items-center z-10">
+          <div className="mb-12 text-center">
+            <p className={`text-2xl text-[#f8fafc] font-cursive mb-4 tracking-wide`}>Counting heartbeats across lightyears...</p>
+            <div className={`flex gap-6 ${theme.goldText} font-light text-3xl tracking-widest`}>
+              <span>{timeLeft.days}d</span><span className="opacity-40">:</span><span>{timeLeft.hours}h</span><span className="opacity-40">:</span><span>{timeLeft.minutes}m</span><span className="opacity-40">:</span><span>{timeLeft.seconds}s</span>
             </div>
           </div>
-          <div className="w-80 h-56 bg-[#f3e5ab] shadow-2xl flex items-center justify-center relative border-t-2 border-[#e6d0a1]">
-            <div className="absolute top-0 left-0 w-0 h-0 border-l-[160px] border-l-transparent border-t-[110px] border-t-[#ebdcb2] border-r-[160px] border-r-transparent"></div>
-            <button onClick={() => setStage('reading')} className={`z-20 w-16 h-16 rounded-full ${theme.wine} border-4 border-[#5e2129] flex items-center justify-center shadow-lg transform hover:scale-110 transition-transform`}>
-              <span className={`text-[#d4af37] text-2xl font-bold italic`}>SV</span>
+          <div className={`w-80 h-52 ${theme.card} flex items-center justify-center relative border-t border-[#d4af37]/40 rounded-b-xl`}>
+            <div className="absolute top-0 left-0 w-0 h-0 border-l-[160px] border-l-transparent border-t-[100px] border-t-[#161826] border-r-[160px] border-r-transparent"></div>
+            <button onClick={() => setStage('reading')} className={`z-20 w-14 h-14 rounded-full bg-[#050510] border border-[#d4af37] flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.5)] transform hover:scale-110 transition-all duration-300 group`}>
+              <Moon className="text-[#d4af37] w-5 h-5 group-hover:rotate-12 transition-transform" />
             </button>
           </div>
         </div>
       )}
 
-      {/* STAGE 4: READING */}
       {stage === 'reading' && (
-        <div className="relative w-full max-w-xl p-4">
-          <div className={`bg-[#fdf6e3] relative shadow-2xl mx-auto border ${theme.gold}/30 h-[650px] flex flex-col`}>
+        <div className="relative w-full max-w-lg p-4 z-10">
+          <div className={`${theme.card} relative shadow-[0_0_60px_rgba(0,0,0,0.8)] mx-auto border ${theme.border} rounded-2xl h-[640px] flex flex-col overflow-hidden`}>
 
             {/* FRONT COVER */}
             {page === 0 && (
-              <div className="p-8 md:p-10 flex-grow flex flex-col">
-                <div className="animate-fade-in text-center my-auto">
-                  <Heart fill="#722f37" size={50} className="mx-auto mb-6 text-[#722f37] animate-pulse" />
-                  <h1 className={`text-4xl md:text-5xl ${theme.wineText} font-script mb-4`}>To My Future Wife</h1>
-                  <p className="italic text-gray-600 mb-8 px-4">"Words from the heart of a man waiting for his home."</p>
-                  <button onClick={nextPage} className="mx-auto flex items-center gap-2 border px-6 py-2 border-[#722f37] text-[#722f37] font-bold hover:bg-[#722f37] hover:text-white transition-all">Begin Reading <ChevronRight size={18} /></button>
+              <div className="p-10 flex-grow flex flex-col animate-fade-in">
+                <div className="text-center my-auto">
+                  <Star fill="#d4af37" size={40} className="mx-auto mb-10 text-[#d4af37] animate-pulse" />
+                  <h1 className={`text-4xl md:text-5xl ${theme.silverText} font-cursive mb-6 tracking-wide`}>To My Future Wife</h1>
+                  <p className="font-light text-[#94a3b8] mb-12 px-6 text-[11px] tracking-[0.3em] uppercase leading-relaxed">A message of love <br /> across our little solar system</p>
+                  <button onClick={nextPage} className="mx-auto flex items-center gap-3 border-2 border-[#d4af37] px-8 py-3 text-[#d4af37] text-[12px] font-bold uppercase tracking-[0.3em] hover:bg-[#d4af37] hover:text-black transition-all duration-300 rounded-full shadow-[0_0_15px_rgba(212,175,55,0.3)]">Enter Orbit <ChevronRight size={16} /></button>
                 </div>
               </div>
             )}
 
-            {/* PAGES */}
+            {/* PAGES WITH TOP NAVIGATION */}
             {page > 0 && page <= pages.length && (
-              <div className="p-8 md:p-10 flex-grow flex flex-col animate-fade-in relative">
-                <div className={`flex justify-between ${theme.wineText} text-[10px] uppercase tracking-widest mb-4 border-b ${theme.gold} pb-2 font-bold z-10`}>
-                  <span>{pages[page - 1].title}</span><span>{page} / {pages.length}</span>
+              <div className="flex-grow flex flex-col animate-fade-in relative">
+
+                {/* TOP NAVIGATION BAR */}
+                <div className="flex justify-between items-center p-6 border-b border-white/10 z-20 bg-white/5 backdrop-blur-sm">
+                  <button
+                    onClick={prevPage}
+                    className="flex items-center gap-1 px-3 py-1.5 border border-white/10 rounded-full text-[#8b9bb4] text-[9px] uppercase tracking-[0.2em] hover:bg-white/10 transition-all active:scale-95"
+                  >
+                    <ChevronLeft size={12} /> Back
+                  </button>
+
+                  <div className="flex flex-col items-center">
+                    <span className={`${theme.goldText} text-[10px] font-bold tracking-[0.3em] uppercase`}>{pages[page - 1].title}</span>
+                    <span className="text-[8px] text-[#4a5568] tracking-[0.2em]">{page} / {pages.length}</span>
+                  </div>
+
+                  <button
+                    onClick={nextPage}
+                    className="flex items-center gap-1 px-4 py-1.5 border-2 border-[#d4af37] rounded-full text-[#d4af37] text-[9px] font-bold uppercase tracking-[0.2em] hover:bg-[#d4af37] hover:text-black transition-all active:scale-95 shadow-[0_0_10px_rgba(212,175,55,0.2)]"
+                  >
+                    {page === pages.length ? "Finish" : "Next"} <ChevronRight size={12} />
+                  </button>
                 </div>
 
-                <div className="flex-grow overflow-y-auto custom-scrollbar relative flex flex-col">
-
-                  {/* PAGE 1: DIALOGUE */}
-                  {pages[page - 1].type === "dialogue" && (
-                    <div className="mt-4">
-                      <p className={`text-lg md:text-[22px] leading-loose font-script text-left ${theme.wineText} whitespace-pre-line`}>
-                        {pages[page - 1].content}
+                {/* Scrollable Content Area */}
+                <div className="flex-grow overflow-y-auto custom-scrollbar relative px-8 py-4">
+                  <div className="mt-4 flex flex-col items-center pb-12">
+                    <div className="text-3xl mb-8 drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]">{pages[page - 1].icon}</div>
+                    <p className={`text-[12px] md:text-[18px] leading-[1.7] font-cursive text-center text-[#f1f5f9] whitespace-pre-line tracking-wide ${isFinalPoemLocked ? 'blur-[2px] select-none' : ''}`}>
+                      {isFinalPoemLocked ? lockedPoemPreview : pages[page - 1].content}
+                    </p>
+                    {isFinalPoemLocked && (
+                      <p className="mt-2 text-center text-[8px] uppercase tracking-[0.2em] text-[#d4af37]/90">
+                        Final poem unlocks but hear it from your soon to be husband. Next reveal in {revealCountdown}.
                       </p>
-                    </div>
-                  )}
-
-                  {/* PAGE 2: NAME HEART CLOUD */}
-                  {pages[page - 1].type === "heart-cloud" && (
-                    <div className="w-full h-full flex items-center justify-center relative mt-4">
-                      {/* SVG Heart Path Outline */}
-                      <svg viewBox="0 0 300 300" className="absolute inset-0 w-full h-full overflow-visible opacity-80" style={{ transform: 'scale(1.1)' }}>
-                        <defs>
-                          {/* Perfect Heart Path */}
-                          <path id="heartPath" d="M 150 250 C 150 250 40 160 40 90 C 40 40 100 40 150 90 C 200 40 260 40 260 90 C 260 160 150 250 150 250 Z" />
-                        </defs>
-                        <text className="font-bold uppercase tracking-widest text-[11px]" fill="#d4af37">
-                          <textPath href="#heartPath" startOffset="0%">
-                            <animate attributeName="startOffset" from="0%" to="-100%" dur="25s" repeatCount="indefinite" />
-                            SIDDHESH ♥ VIDHI • SIDDHESH ♥ VIDHI • SIDDHESH ♥ VIDHI • SIDDHESH ♥ VIDHI • SIDDHESH ♥ VIDHI •
-                          </textPath>
-                          <textPath href="#heartPath" startOffset="100%">
-                            <animate attributeName="startOffset" from="100%" to="0%" dur="25s" repeatCount="indefinite" />
-                            SIDDHESH ♥ VIDHI • SIDDHESH ♥ VIDHI • SIDDHESH ♥ VIDHI • SIDDHESH ♥ VIDHI • SIDDHESH ♥ VIDHI •
-                          </textPath>
-                        </text>
-                      </svg>
-
-                      {/* Inner Word Cloud */}
-                      <div className="relative z-10 w-[65%] h-[60%] flex flex-wrap justify-center items-center content-center text-center -mt-8">
-                        {pages[page - 1].words.map((word, index) => {
-                          const sizes = ['text-[10px]', 'text-xs', 'text-sm', 'text-base', 'text-lg', 'text-xl'];
-                          const colors = ['text-[#722f37]', 'text-[#d4af37]', 'text-[#5e2129]', 'text-[#8a7243]'];
-                          const randomSize = sizes[index % sizes.length];
-                          const randomColor = colors[index % colors.length];
-
-                          return (
-                            <span
-                              key={index}
-                              className={`mx-1.5 my-1 ${randomSize} ${randomColor} font-serif transition-transform hover:scale-125 hover:z-20 cursor-default leading-tight drop-shadow-sm`}
-                            >
-                              {word}
-                            </span>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
 
-                <div className="flex justify-between mt-6 pt-4 border-t border-[#d4af37]/20 bg-[#fdf6e3] z-10">
-                  <button onClick={prevPage} className="text-[#d4af37] text-xs uppercase tracking-widest flex items-center hover:text-[#722f37] transition-colors"><ChevronLeft size={14} /> Back</button>
-                  <button onClick={nextPage} className="text-[#722f37] font-bold text-sm underline hover:text-[#d4af37] transition-colors">{page === pages.length ? "Finish" : "Next Page"}</button>
+                {/* Subtle Progress Bar at Bottom */}
+                <div className="h-1 w-full bg-white/5">
+                  <div className="h-full bg-[#d4af37]/40 transition-all duration-500" style={{ width: `${(page / pages.length) * 100}%` }}></div>
                 </div>
               </div>
             )}
 
             {/* END CREDITS */}
             {page > pages.length && (
-              <div className="p-8 md:p-10 flex-grow flex flex-col">
-                <div className="animate-fade-in text-center my-auto flex flex-col items-center">
-                  <Sparkles size={30} className="text-[#d4af37] mb-6 animate-pulse" />
-                  <h2 className={`text-3xl ${theme.wineText} font-script mb-6`}>Our Story Continues...</h2>
-                  <p className="text-gray-700 italic text-lg leading-relaxed mb-8 px-4">
-                    "I am stringing along the literature of our coming days. Keep coming back daily to see the glitter of magic changes in my writing..."
+              <div className="p-10 flex-grow flex flex-col relative overflow-hidden">
+                <div className="animate-fade-in text-center my-auto flex flex-col items-center z-10">
+                  <Sparkles size={35} className="text-[#d4af37] mb-8 animate-pulse" />
+                  <h2 className={`text-4xl ${theme.silverText} font-cursive mb-6 tracking-wide`}>The Universe is Ours</h2>
+                  <p className="text-[#94a3b8] font-light text-[15px] leading-relaxed mb-10 px-6 tracking-wide italic">
+                    "Every star in the sky is a testament to the time I am willing to wait, and the love I am ready to give."
                   </p>
-                  <div className={`w-20 h-px ${theme.gold} mb-6`}></div>
-                  <p className={`${theme.wineText} font-bold tracking-[.3em] uppercase text-xs`}>Until Tomorrow, My Love</p>
-                  <button onClick={() => setPage(1)} className="mt-8 text-[10px] text-gray-400 uppercase tracking-widest hover:text-[#722f37]">Re-read from the heart</button>
+                  <div className={`w-20 h-[1px] bg-[#d4af37]/40 mb-8`}></div>
+                  <p className={`${theme.goldText} tracking-[0.5em] uppercase text-[9px]`}>See you in our orbit</p>
+                  <button onClick={() => setPage(1)} className="mt-12 px-8 py-2.5 border border-[#d4af37] text-[#d4af37] text-[10px] uppercase tracking-[0.4em] rounded-full hover:bg-[#d4af37] hover:text-black transition-all font-bold">
+                    Restart Journey
+                  </button>
                 </div>
               </div>
             )}
-
           </div>
         </div>
       )}
 
       <style>{`
-        @keyframes bounce-walk { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        .animate-bounce-walk { animation: bounce-walk 1s infinite ease-in-out; }
-        @keyframes fall { 0% { transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(360deg); opacity: 0; } }
-        .animate-fall { animation: fall linear forwards; }
-        .animate-fade-in { animation: fadeIn 0.8s ease-out; }
-        .animate-fade-in-up { animation: fadeInUp 0.6s ease-out both; }
-        .font-script { font-family: 'Great Vibes', cursive; }
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600&display=swap');
+        .font-cursive { font-family: 'Caveat', cursive; }
+        .star-bg {
+          background-image: radial-gradient(1.5px 1.5px at 20px 30px, #ffffff, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 150px 150px, #ffffff, rgba(0,0,0,0)), radial-gradient(2px 2px at 80px 230px, #d4af37, rgba(0,0,0,0));
+          background-repeat: repeat; background-size: 300px 300px;
+        }
+        @keyframes starPulse { 0% { transform: scale(0); opacity: 0; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(0); opacity: 0; } }
+        .animate-star-pulse { animation: starPulse ease-in-out forwards; }
+        .animate-fade-in { animation: fadeIn 1s ease-out; }
+        .animate-fade-in-up { animation: fadeInUp 0.8s ease-out both; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(212, 175, 55, 0.1); }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar { width: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.3); border-radius: 10px; }
       `}</style>
     </div>
   );
