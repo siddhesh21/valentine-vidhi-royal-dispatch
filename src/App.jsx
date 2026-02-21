@@ -15,32 +15,64 @@ const RoyalLetter = () => {
 
   const pages = [
     {
-      title: "Part I: Gravity",
+      title: "Part I",
       icon: "🌌",
-      content: `My love for you feels like standing beneath a sky full of galaxies — aware of how small I am, yet certain of what I am drawn toward.
+      content: `My love,
 
-In a universe filled with wandering planets and silent vacuum, you are the gravity that steadies me. Not a black hole that consumes, but a sun that gives direction.
+You don’t have to carry everything alone.
+Not the heavy thoughts. Not the quiet fears. Not the weight pressing on your chest.
 
-I have always admired the cosmos — its event horizons, its dwarf planets, its mysteries that refuse to be rushed. And loving you feels similar. 
-Not something to conquer, but something to approach with respect, curiosity, and patience.`
+Talk to me. I’m here.
+Even from miles away, I am here.
+
+I know how strong you are — I admire that strength every day.
+But strength doesn’t mean you have to suffer in silence.
+
+Lean on me. Let me hold some of it.
+Let me take care of you the way you deserve.
+
+I’m coming to you soon — but until then, my heart is already there.
+Don’t shut me out. Don’t shut yourself down.
+
+We face things together.
+Always.`
     },
     {
-      title: "Part II: Principle",
+      title: "Part II",
       icon: "🪐",
-      content: `With you, I am not lost in space. I am anchored. I want to be the kind of man whose presence feels like home — strong without arrogance, gentle without weakness, a gentleman not by performance, but by principle.
+      content: `Every time I think of you, I feel grateful that somehow, in this vast world, we found each other.
 
-I want to nurture what we build the way astronomers study distant exoplanets — carefully, attentively, always in awe of what is possible. 
+You have become my calm. My warmth. My quiet joy.
+Life feels fuller with you in it — deeper, brighter, more certain.
 
-To communicate openly, like light traveling across years just to reach its destination. To stand beside you with pride, not possession. To admire you without diminishing myself.`
+What we share now means everything to me.
+And what we have yet to discover together feels endless.
+
+With you beside me, the future doesn’t scare me — it excites me.
+There is no one else I would choose for this life.
+
+I love you. Always. With all that I am.`
     },
     {
-      title: "Part III: The Orbit",
+      title: "Part III",
       icon: "🌓",
-      content: `You deserve a love that is expansive yet steady — one that dreams of galaxies but still remembers to hold your hand on earth.
+      content: `You are everything I ever dreamed of — and somehow more than I knew to ask for.
+My answered prayer. My beautiful surprise.
 
-If life is a vast, unknown universe, then let us become our own small solar system — balanced, warm, and alive with movement. Not perfect. Not dramatic. But real.
+I have fallen for you in a way that feels steady and certain.
+I want you — not just your laughter and light — but your storms, your silence, your imperfect days too.
 
-And I would be honored to call you my wife — to orbit each other not out of obligation, but by choice, every single day.`
+We will disagree. We will stumble. We are human.
+But I promise you this — I will stay.
+I will speak honestly. I will listen deeply.
+I will respect you, choose you, make time for you.
+
+I want to care for you, to tease you, to hold you close after I annoy you.
+To grow beside you. To win your heart again and again.
+To build something that feels like home.
+
+I love you — completely, intentionally, without hesitation.
+And as long as forever exists, my heart is yours.`
     },
     {
       title: "Yours Infinite Gentleman",
@@ -218,7 +250,7 @@ In the cosmic years ahead.`
                 <div className="flex-grow overflow-y-auto custom-scrollbar relative px-8 py-4">
                   <div className="mt-4 flex flex-col items-center pb-12">
                     <div className="text-3xl mb-8 drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]">{pages[page - 1].icon}</div>
-                    <p className="text-[12px] md:text-[18px] leading-[1.7] font-cursive text-center text-[#f1f5f9] whitespace-pre-line tracking-wide">
+                    <p className="text-[12px] md:text-[14px] leading-[1.7] font-cursive text-center text-[#f1f5f9] whitespace-pre-line tracking-wide">
                       {pages[page - 1].content}
                     </p>
                   </div>
