@@ -4,14 +4,6 @@ import { ChevronRight, ChevronLeft, Sparkles, Star, Moon } from 'lucide-react';
 const START_DATE_MS = new Date('2025-10-26T00:00:00+05:30').getTime();
 const TARGET_DATE_MS = new Date('2026-03-14T00:00:00+05:30').getTime();
 const TOTAL_DURATION_MS = TARGET_DATE_MS - START_DATE_MS;
-const REVEAL_START_MINUTE_IST = 13 * 60 + 45;
-const REVEAL_END_MINUTE_IST = 14 * 60 + 20;
-const IST_TIME_FORMATTER = new Intl.DateTimeFormat('en-IN', {
-  timeZone: 'Asia/Kolkata',
-  hour: '2-digit',
-  minute: '2-digit',
-  hour12: false,
-});
 
 const RoyalLetter = () => {
   const [stage, setStage] = useState('journey');
@@ -123,33 +115,6 @@ In the cosmic years ahead.`
 
   const currentRadius = 130 - (progress * 1.3);
   const currentRotation = progress * 14.4;
-  const currentIstTime = IST_TIME_FORMATTER.formatToParts(new Date());
-  const istHour = Number(currentIstTime.find((part) => part.type === 'hour')?.value ?? 0);
-  const istMinute = Number(currentIstTime.find((part) => part.type === 'minute')?.value ?? 0);
-  const istMinuteOfDay = istHour * 60 + istMinute;
-  const isPoemRevealWindow =
-    istMinuteOfDay >= REVEAL_START_MINUTE_IST && istMinuteOfDay <= REVEAL_END_MINUTE_IST;
-  const isFinalPoemPage = page === pages.length;
-  const isFinalPoemLocked = isFinalPoemPage && !isPoemRevealWindow;
-  const minutesUntilNextReveal =
-    istMinuteOfDay < REVEAL_START_MINUTE_IST
-      ? REVEAL_START_MINUTE_IST - istMinuteOfDay
-      : 24 * 60 - istMinuteOfDay + REVEAL_START_MINUTE_IST;
-  const revealCountdown = `${Math.floor(minutesUntilNextReveal / 60)}h ${minutesUntilNextReveal % 60}m`;
-  const lockedPoemPreview = `My heart is a telescope,
-Fixed only on your light,
-.....................
-.....................
-
-No vacuum can extinguish,
-.....................
-.....................
-.....................
-
-To the edges of the universe,
-.....................
-.....................
-.....................`;
 
   return (
     <div className={`min-h-screen w-full flex flex-col items-center justify-center ${theme.bg} overflow-hidden relative star-bg font-sans text-white`}>
@@ -253,14 +218,9 @@ To the edges of the universe,
                 <div className="flex-grow overflow-y-auto custom-scrollbar relative px-8 py-4">
                   <div className="mt-4 flex flex-col items-center pb-12">
                     <div className="text-3xl mb-8 drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]">{pages[page - 1].icon}</div>
-                    <p className={`text-[12px] md:text-[18px] leading-[1.7] font-cursive text-center text-[#f1f5f9] whitespace-pre-line tracking-wide ${isFinalPoemLocked ? 'blur-[2px] select-none' : ''}`}>
-                      {isFinalPoemLocked ? lockedPoemPreview : pages[page - 1].content}
+                    <p className="text-[12px] md:text-[18px] leading-[1.7] font-cursive text-center text-[#f1f5f9] whitespace-pre-line tracking-wide">
+                      {pages[page - 1].content}
                     </p>
-                    {isFinalPoemLocked && (
-                      <p className="mt-2 text-center text-[8px] uppercase tracking-[0.2em] text-[#d4af37]/90">
-                        Final poem unlocks but hear it from your soon to be husband. Next reveal in {revealCountdown}.
-                      </p>
-                    )}
                   </div>
                 </div>
 
