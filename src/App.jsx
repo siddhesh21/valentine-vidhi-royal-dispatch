@@ -1,103 +1,189 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronRight, ChevronLeft, Sparkles, Star, Moon } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Flame, Heart, Home, Lock } from 'lucide-react';
 
-const START_DATE_MS = new Date('2025-10-26T00:00:00+05:30').getTime();
-const TARGET_DATE_MS = new Date('2026-03-14T00:00:00+05:30').getTime();
-const TOTAL_DURATION_MS = TARGET_DATE_MS - START_DATE_MS;
-
-const RoyalLetter = () => {
+const CozyLifetimeLetter = () => {
   const [stage, setStage] = useState('journey');
   const [page, setPage] = useState(0);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [daysPast, setDaysPast] = useState(0);
-  const [stars, setStars] = useState([]);
+  const [embers, setEmbers] = useState([]);
   const [progress, setProgress] = useState(0);
+  const [isUnlocked, setIsUnlocked] = useState(false);
+
+  const startDate = new Date('2025-10-26T00:00:00+05:30');
+  const targetDate = new Date('2026-03-14T00:00:00+05:30');
+  const totalDuration = targetDate - startDate;
+
+  // --- TIME LOCK LOGIC (IST) ---
+  useEffect(() => {
+    const checkTime = () => {
+      const now = new Date();
+      const istTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+      const hours = istTime.getHours();
+      // Unlocks at or after 2 PM (14:00) IST
+      if (hours >= 14) {
+        setIsUnlocked(true);
+      } else {
+        setIsUnlocked(false);
+      }
+    };
+    checkTime();
+    const timer = setInterval(checkTime, 60000);
+    return () => clearInterval(timer);
+  }, []);
 
   const pages = [
     {
-      title: "Part I",
-      icon: "🌌",
-      content: `My love,
+      title: "Our Late 20s",
+      subtitle: "The Beginning of Home",
+      icon: "🪴",
+      color: "rgba(139, 69, 19, 0.8)", // Warm Terracotta
+      border: "border-[#d27d2d]",
+      content: `This is where we are brave enough to choose each other fully.
 
-You don’t have to carry everything alone.
-Not the heavy thoughts. Not the quiet fears. Not the weight pressing on your chest.
+We found each other at the right time — not when life was easy, but when we were ready. We commit to our bond not because it is convenient, but because it feels steady. We get married not out of pressure, but out of certainty.
 
-Talk to me. I’m here.
-Even from miles away, I am here.
+You move countries. You move your life. You trust me enough to build beside me.
 
-I know how strong you are — I admire that strength every day.
-But strength doesn’t mean you have to suffer in silence.
+We learn how to live together — not perfectly, but intentionally. We figure out where the mugs go. We argue over shelf space. We learn each other’s rhythms — your quiet mornings, my late nights. We become fluent in each other’s moods.
 
-Lean on me. Let me hold some of it.
-Let me take care of you the way you deserve.
+You build your brand with focus and courage. I watch you sit at a desk near the window, sketchbook open, ideas spilling out of you. Your name begins to mean something. Your art begins to travel further than we do.
 
-I’m coming to you soon — but until then, my heart is already there.
-Don’t shut me out. Don’t shut yourself down.
+I grow in my career, steady and disciplined. We motivate each other to stay sharp, to stay hungry.
 
-We face things together.
-Always.`
+We travel for our honeymoon — somewhere that feels like a dream we whispered about. Later, Japan. Later, under the northern lights, holding your gloved hands in mine. We get a small cat that rules the house like royalty.
+
+We work out together. Not for vanity — but for longevity. For the promise of many decades ahead.
+
+In these years, we are building. Learning. Becoming.`
     },
     {
-      title: "Part II",
-      icon: "🪐",
-      content: `Every time I think of you, I feel grateful that somehow, in this vast world, we found each other.
+      title: "Early to Mid 30s",
+      subtitle: "Expansion",
+      icon: "🖼️",
+      color: "rgba(184, 115, 51, 0.8)", // Rich Copper
+      border: "border-[#cd7f32]",
+      content: `By now, We will enter our newly purchased house and start to make it our home and soon it will feel like US lived in. It smells like us.
 
-You have become my calm. My warmth. My quiet joy.
-Life feels fuller with you in it — deeper, brighter, more certain.
+Your exhibitions grow. Not small gallery corners — full rooms. Your paintings hang under proper lighting. People stand quietly in front of your work, studying it. I stand in the back, watching you more than the art.
 
-What we share now means everything to me.
-And what we have yet to discover together feels endless.
+You step onto bigger platforms. You own your voice.
 
-With you beside me, the future doesn’t scare me — it excites me.
-There is no one else I would choose for this life.
+We begin to talk seriously about welcoming someone new into our lives. A child. A heartbeat. A new laugh in our home. We prepare not just financially — but emotionally. We strengthen ourselves for it.
 
-I love you. Always. With all that I am.`
+If we are blessed with children, we support each other relentlessly. Late nights become shared shifts. Stress becomes shared responsibility. We protect each other’s mental health fiercely.
+
+We still walk in the evenings. Still hold hands. Still choose each other.`
     },
     {
-      title: "Part III",
-      icon: "🌓",
-      content: `You are everything I ever dreamed of — and somehow more than I knew to ask for.
-My answered prayer. My beautiful surprise.
+      title: "Late 30s",
+      subtitle: "Rooted and Rising",
+      icon: "🌳",
+      color: "rgba(31, 61, 43, 0.8)", // Deep Forest Green
+      border: "border-[#4f7942]",
+      content: `By now, your exhibitions feel prestigious. Invitations come without you chasing them. Your name carries weight.
 
-I have fallen for you in a way that feels steady and certain.
-I want you — not just your laughter and light — but your storms, your silence, your imperfect days too.
+We are more established — in business, in career, in identity.
 
-We will disagree. We will stumble. We are human.
-But I promise you this — I will stay.
-I will speak honestly. I will listen deeply.
-I will respect you, choose you, make time for you.
+The children grow. We grow with them.
 
-I want to care for you, to tease you, to hold you close after I annoy you.
-To grow beside you. To win your heart again and again.
-To build something that feels like home.
+We stay disciplined about our health. We refuse to let exhaustion swallow us whole. We lift weights. We stretch. We remind each other to drink water and sleep.
 
-I love you — completely, intentionally, without hesitation.
-And as long as forever exists, my heart is yours.`
+We travel more intentionally now. Not rushed. Not chaotic. We savor places.
+
+And even with full schedules and growing responsibilities, we still look at each other across the room and feel that same pull from our first years.`
     },
     {
-      title: "Yours Infinite Gentleman",
-      icon: "✨",
-      content: `My heart is a telescope,
-Fixed only on your light,
-A gentleman's devotion,
-Through the vacuum of the night.
+      title: "Our 40s",
+      subtitle: "Reflection and Strength",
+      icon: "🍷",
+      color: "rgba(74, 21, 75, 0.8)", // Deep Plum
+      border: "border-[#800020]",
+      content: `We celebrate 15 years together with children who know what steady love looks like.
 
-No vacuum can extinguish,
-The warmth you bring to me,
-My love is not a theory,
-It's our soul's discovery.
+We take care of our health seriously. We check in with each other — physically and emotionally. We understand that longevity is a gift we must protect.
 
-To the edges of the universe,
-And the simple path we tread,
-I'll be the home you return to,
-In the cosmic years ahead.`
+We go on date nights because we want to — not because we need to fix something.
+
+We look back at what we built from nothing. The business. The art. The home. The family.
+
+We admire each other more than we did when we were young — because now admiration is earned daily.
+
+We teach our children values not just through words, but through example: discipline, loyalty, kindness, strength.`
+    },
+    {
+      title: "Our 50s",
+      subtitle: "A Softer Season",
+      icon: "🍂",
+      color: "rgba(139, 101, 8, 0.8)", // Warm Amber
+      border: "border-[#daa520]",
+      content: `Some of the children begin to leave the nest. The house grows quieter again.
+
+We allow ourselves to be selfish in the sweetest way. More travel. More long mornings. More spontaneous drives.
+
+We settle closer to nature. The house we dreamed of becomes real — open land, animals, a garden we pretend we fully understand.
+
+There’s a garage with vintage cars and motorcycles. You shake your head at me, but you smile every time.
+
+We built this. Slowly. Together.`
+    },
+    {
+      title: "Our 60s",
+      subtitle: "Legacy and Guidance",
+      icon: "🕰️",
+      color: "rgba(26, 43, 76, 0.8)", // Deep Navy
+      border: "border-[#4682b4]",
+      content: `Now we guide more than we build.
+
+Our children come to us for advice — not because they have to, but because they trust us. We help them through their life decisions without controlling them.
+
+We stay fit. We stay active. We lift our grandchildren into the air. We play with them. We tell them stories — stories we documented. Stories from the beginning.
+
+We travel as a big family sometimes. We sit at the head of the table, not out of authority — but out of years earned.`
+    },
+    {
+      title: "Our 70s",
+      subtitle: "Back to Us",
+      icon: "☕",
+      color: "rgba(47, 79, 79, 0.8)", // Slate Gray/Blue
+      border: "border-[#708090]",
+      content: `Life slows again.
+
+We travel simply because we can. We revisit places that meant something. We sit quietly in parks, on benches, in small cafés.
+
+Sometimes we laugh remembering how young and serious we were when we first started dating. How intense everything felt. How dramatic distance once seemed.
+
+We hold hands not out of habit — but out of preference.`
+    },
+    {
+      title: "Our 80s, 90s, 100s",
+      subtitle: "The Two of Us",
+      icon: "🕯️",
+      color: "rgba(96, 16, 16, 0.8)", // Rich Crimson
+      border: "border-[#b22222]",
+      content: `At some point, it becomes just us again.
+
+Generations gather around us. Children. Grandchildren. Their children.
+
+They look at us and see what endurance looks like. What health looks like. What love maintained with discipline looks like.
+
+We are proud — not of wealth, not of status — but of the way we treated each other.
+
+In the end, it was always simple.
+
+We chose each other.
+We protected each other.
+We grew beside each other.
+We never stopped walking next to one another.
+
+And even after all the decades, when the house is quiet and the lights are low, it is still just two people who once met in their late 20s — brave enough to say yes.`
     }
   ];
 
   useEffect(() => {
     const timer = setInterval(() => {
-      const nowMs = Date.now();
-      const difference = TARGET_DATE_MS - nowMs;
+      const now = new Date();
+      const difference = targetDate - now;
       if (difference > 0) {
         setTimeLeft({
           days: Math.floor(difference / (1000 * 60 * 60 * 24)),
@@ -106,177 +192,188 @@ In the cosmic years ahead.`
           seconds: Math.floor((difference / 1000) % 60),
         });
       }
-      const timeSinceStart = nowMs - START_DATE_MS;
+      const timeSinceStart = now - startDate;
       setDaysPast(Math.floor(timeSinceStart / (1000 * 60 * 60 * 24)));
-      setProgress(Math.min(100, Math.max(0, (timeSinceStart / TOTAL_DURATION_MS) * 100)));
+      setProgress(Math.min(100, Math.max(0, (timeSinceStart / totalDuration) * 100)));
     }, 1000);
     return () => clearInterval(timer);
   }, []);
 
   useEffect(() => {
     if (stage === 'journey') {
-      const timer = setTimeout(() => setStage('arrived'), 11000);
+      const timer = setTimeout(() => setStage('arrived'), 10000);
       return () => clearTimeout(timer);
     }
   }, [stage]);
 
-  const triggerStarPulse = () => {
-    const newStars = Array.from({ length: 20 }).map((_, i) => ({
+  const triggerEmberPulse = () => {
+    const newEmbers = Array.from({ length: 12 }).map((_, i) => ({
       id: Date.now() + i,
       left: Math.random() * 100,
-      top: Math.random() * 100,
-      animationDuration: 1.2 + Math.random() * 1.5,
-      delay: Math.random() * 0.3,
-      char: ['✨', '⭐', '🌟', '💫'][Math.floor(Math.random() * 4)]
+      top: 100 + Math.random() * 20, // Start from bottom
+      size: 4 + Math.random() * 6,
+      animationDuration: 3 + Math.random() * 4,
+      delay: Math.random() * 0.5,
     }));
-    setStars(prev => [...prev, ...newStars]);
-    setTimeout(() => setStars(prev => prev.filter(s => s.id < Date.now())), 3000);
+    setEmbers(prev => [...prev, ...newEmbers]);
+    setTimeout(() => setEmbers(prev => prev.filter(e => e.id < Date.now())), 5000);
   };
 
-  const nextPage = () => { setPage(prev => prev + 1); triggerStarPulse(); };
+  const nextPage = () => { setPage(prev => prev + 1); triggerEmberPulse(); };
   const prevPage = () => setPage(prev => prev - 1);
 
-  const theme = {
-    bg: "bg-[#050510]",
-    card: "bg-[#0b0c16]/90 backdrop-blur-xl",
-    border: "border-[#d4af37]/40",
-    goldText: "text-[#d4af37]",
-    silverText: "text-[#e2e8f0]",
-    accent: "text-[#8b9bb4]"
-  };
+  // Math for the cozy spiral toward the hearth
+  const angle = progress * 0.1 * Math.PI * 4;
+  const radius = 180 * (1 - progress / 100);
+  const posX = Math.cos(angle) * radius;
+  const posY = Math.sin(angle) * radius;
 
-  const currentRadius = 130 - (progress * 1.3);
-  const currentRotation = progress * 14.4;
+  // Determine dynamic background color for reading stage
+  const currentCardColor = page > 0 && page <= pages.length ? pages[page - 1].color : "rgba(30, 20, 15, 0.9)";
+  const currentBorderColor = page > 0 && page <= pages.length ? pages[page - 1].border : "border-[#d4af37]/30";
 
   return (
-    <div className={`min-h-screen w-full flex flex-col items-center justify-center ${theme.bg} overflow-hidden relative star-bg font-sans text-white`}>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-indigo-950/40 via-[#050510]/95 to-[#050510] pointer-events-none z-0"></div>
+    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#15100c] overflow-hidden relative font-sans text-white">
 
+      {/* COZY GLOW GRADIENT */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#3d2110_0%,_#15100c_80%)] opacity-80 pointer-events-none"></div>
+
+      {/* FLOATING EMBERS */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-[60]">
-        {stars.map(star => (
-          <div key={star.id} className="absolute text-xl animate-star-pulse" style={{ left: `${star.left}%`, top: `${star.top}%`, animationDuration: `${star.animationDuration}s`, animationDelay: `${star.delay}s` }}>{star.char}</div>
+        {embers.map(ember => (
+          <div
+            key={ember.id}
+            className="absolute bg-[#ffb05c] rounded-full blur-[1px] animate-float-up"
+            style={{
+              left: `${ember.left}%`,
+              top: `${ember.top}%`,
+              width: `${ember.size}px`,
+              height: `${ember.size}px`,
+              animationDuration: `${ember.animationDuration}s`,
+              animationDelay: `${ember.delay}s`,
+              boxShadow: '0 0 10px 2px rgba(255, 150, 50, 0.6)'
+            }}
+          />
         ))}
       </div>
 
+      {/* STAGE 1: THE JOURNEY HOME */}
       {stage === 'journey' && (
         <div className="flex flex-col items-center justify-center animate-fade-in w-full max-w-3xl p-6 z-10">
-          <h2 className={`${theme.silverText} text-xl mb-24 tracking-[0.4em] uppercase font-light text-center`}>Orbiting Towards You</h2>
-          <div className="relative w-64 h-64 flex items-center justify-center">
-            <div className="absolute inset-0 border border-white/10 rounded-full animate-[spin_90s_linear_infinite]"></div>
-            <div className="absolute inset-12 border border-white/10 rounded-full border-dashed animate-[spin_60s_linear_infinite_reverse]"></div>
-            <div className="absolute w-24 h-24 rounded-full bg-[radial-gradient(circle,_rgba(147,51,234,0.45)_0%,_rgba(76,29,149,0.15)_40%,_rgba(0,0,0,0)_75%)] animate-pulse"></div>
-            <div className="absolute w-14 h-14 rounded-full border-2 border-[#d4af37]/70 animate-[spin_6s_linear_infinite]"></div>
-            <div className="absolute w-8 h-8 rounded-full border border-white/50 animate-[spin_3s_linear_infinite_reverse]"></div>
-            <div className="z-10 text-[10px] tracking-[0.2em] uppercase text-[#d4af37]">Wormhole</div>
-            <div className="absolute transition-all duration-[7000ms] ease-out z-20" style={{ transform: `rotate(${currentRotation}deg) translateX(${currentRadius}px) rotate(-${currentRotation}deg)` }}>
+          <h2 className="text-[#fcdbb6] text-xl mb-32 tracking-[0.4em] uppercase font-light text-center">The Journey Home</h2>
+          <div className="relative w-80 h-80 flex items-center justify-center">
+            {/* The Hearth / Home Glow */}
+            <div className="absolute w-32 h-32 bg-[#ff8c00] rounded-full blur-[70px] opacity-40 animate-pulse"></div>
+            <div className="hearth-ring w-64 h-64 border border-[#ffb05c]/20 rounded-full"></div>
+            <div
+              className="absolute transition-all duration-[10000ms] ease-linear z-20"
+              style={{ transform: `translate(${posX}px, ${posY}px) rotate(${angle * 20}deg)` }}
+            >
               <div className="relative">
-                <div className="text-3xl">🚀</div>
-                <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-black/80 border border-[#d4af37]/40 text-[#d4af37] text-[9px] px-3 py-1 rounded-full whitespace-nowrap tracking-widest">Day {daysPast}</div>
+                <div className="text-4xl filter drop-shadow-[0_0_15px_rgba(255,165,0,0.8)]">🏮</div>
               </div>
             </div>
           </div>
         </div>
       )}
 
+      {/* STAGE 2: ARRIVED */}
       {stage === 'arrived' && (
         <div className="z-50 animate-bounce cursor-pointer p-4 flex flex-col items-center" onClick={() => setStage('sealed')}>
-          <div className={`w-64 h-40 ${theme.card} border ${theme.border} flex items-center justify-center relative rounded-lg shadow-[0_0_30px_rgba(212,175,55,0.1)]`}>
-            <span className={`${theme.goldText} font-light tracking-[0.3em] text-[11px] text-center px-6`}>A TRANSMISSION FROM THE STARS</span>
+          <div className="w-64 h-40 bg-[#1e1410]/90 backdrop-blur-xl border border-[#d27d2d]/50 flex items-center justify-center relative rounded-lg shadow-[0_0_50px_rgba(210,125,45,0.2)]">
+            <span className="text-[#fcdbb6] font-light tracking-[0.3em] text-[11px] text-center px-6 uppercase">You Have Arrived</span>
           </div>
-          <p className={`mt-8 ${theme.accent} text-[10px] uppercase tracking-[0.4em] animate-pulse`}>Tap to Receive</p>
         </div>
       )}
 
+      {/* STAGE 3: SEALED */}
       {stage === 'sealed' && (
         <div className="relative animate-fade-in-up flex flex-col items-center z-10">
           <div className="mb-12 text-center">
-            <p className={`text-2xl text-[#f8fafc] font-cursive mb-4 tracking-wide`}>Counting heartbeats across lightyears...</p>
-            <div className={`flex gap-6 ${theme.goldText} font-light text-3xl tracking-widest`}>
-              <span>{timeLeft.days}d</span><span className="opacity-40">:</span><span>{timeLeft.hours}h</span><span className="opacity-40">:</span><span>{timeLeft.minutes}m</span><span className="opacity-40">:</span><span>{timeLeft.seconds}s</span>
+            <p className="text-3xl text-[#fdfbf7] font-cursive mb-4 tracking-wide">A Lifetime Together</p>
+            <div className="flex gap-6 text-[#d27d2d] font-light text-3xl tracking-widest">
+              <span>{timeLeft.days}d</span><span className="opacity-30">:</span><span>{timeLeft.hours}h</span><span className="opacity-30">:</span><span>{timeLeft.minutes}m</span><span className="opacity-30">:</span><span>{timeLeft.seconds}s</span>
             </div>
           </div>
-          <div className={`w-80 h-52 ${theme.card} flex items-center justify-center relative border-t border-[#d4af37]/40 rounded-b-xl`}>
-            <div className="absolute top-0 left-0 w-0 h-0 border-l-[160px] border-l-transparent border-t-[100px] border-t-[#161826] border-r-[160px] border-r-transparent"></div>
-            <button onClick={() => setStage('reading')} className={`z-20 w-14 h-14 rounded-full bg-[#050510] border border-[#d4af37] flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.5)] transform hover:scale-110 transition-all duration-300 group`}>
-              <Moon className="text-[#d4af37] w-5 h-5 group-hover:rotate-12 transition-transform" />
+          <div className="w-80 h-52 bg-[#1e1410]/90 backdrop-blur-xl flex items-center justify-center relative border-t border-[#d27d2d]/40 rounded-b-xl shadow-2xl">
+            <button onClick={() => { setStage('reading'); triggerEmberPulse(); }} className="z-20 w-14 h-14 rounded-full bg-[#15100c] border border-[#d27d2d] flex items-center justify-center shadow-[0_0_30px_rgba(210,125,45,0.4)] transform hover:scale-110 transition-all duration-500">
+              <Home className="text-[#d27d2d] w-5 h-5" />
             </button>
           </div>
         </div>
       )}
 
+      {/* STAGE 4: READING */}
       {stage === 'reading' && (
         <div className="relative w-full max-w-lg p-4 z-10">
-          <div className={`${theme.card} relative shadow-[0_0_60px_rgba(0,0,0,0.8)] mx-auto border ${theme.border} rounded-2xl h-[640px] flex flex-col overflow-hidden`}>
+          <div
+            className={`backdrop-blur-2xl relative shadow-[0_0_80px_rgba(0,0,0,0.9)] mx-auto border ${currentBorderColor} rounded-2xl h-[640px] flex flex-col overflow-hidden transition-colors duration-1000`}
+            style={{ backgroundColor: currentCardColor }}
+          >
 
             {/* FRONT COVER */}
             {page === 0 && (
               <div className="p-10 flex-grow flex flex-col animate-fade-in">
                 <div className="text-center my-auto">
-                  <Star fill="#d4af37" size={40} className="mx-auto mb-10 text-[#d4af37] animate-pulse" />
-                  <h1 className={`text-4xl md:text-5xl ${theme.silverText} font-cursive mb-6 tracking-wide`}>To My Future Wife</h1>
-                  <p className="font-light text-[#94a3b8] mb-12 px-6 text-[11px] tracking-[0.3em] uppercase leading-relaxed">A message of love <br /> across our little solar system</p>
-                  <button onClick={nextPage} className="mx-auto flex items-center gap-3 border-2 border-[#d4af37] px-8 py-3 text-[#d4af37] text-[12px] font-bold uppercase tracking-[0.3em] hover:bg-[#d4af37] hover:text-black transition-all duration-300 rounded-full shadow-[0_0_15px_rgba(212,175,55,0.3)]">Enter Orbit <ChevronRight size={16} /></button>
+                  <Flame size={45} className="mx-auto mb-10 text-[#ffb05c] animate-pulse drop-shadow-[0_0_15px_rgba(255,176,92,0.6)]" />
+                  <h1 className="text-4xl md:text-5xl text-[#fdfbf7] font-cursive mb-6 tracking-wide">The Life We Will Build</h1>
+                  <p className="font-light text-[#dcb897] mb-12 px-6 text-[11px] tracking-[0.3em] uppercase leading-relaxed">A promise of the years ahead</p>
+                  <button onClick={nextPage} className="mx-auto flex items-center gap-3 border-2 border-[#ffb05c] px-8 py-3 text-[#ffb05c] text-[11px] font-bold uppercase tracking-[0.4em] rounded-full shadow-[0_0_20px_rgba(255,176,92,0.2)] hover:bg-[#ffb05c] hover:text-[#15100c] transition-all duration-300">Open Door <ChevronRight size={16} /></button>
                 </div>
               </div>
             )}
 
-            {/* PAGES WITH TOP NAVIGATION */}
+            {/* THE DECADES */}
             {page > 0 && page <= pages.length && (
-              <div className="flex-grow flex flex-col animate-fade-in relative">
-
-                {/* TOP NAVIGATION BAR */}
-                <div className="flex justify-between items-center p-6 border-b border-white/10 z-20 bg-white/5 backdrop-blur-sm">
-                  <button
-                    onClick={prevPage}
-                    className="flex items-center gap-1 px-3 py-1.5 border border-white/10 rounded-full text-[#8b9bb4] text-[9px] uppercase tracking-[0.2em] hover:bg-white/10 transition-all active:scale-95"
-                  >
-                    <ChevronLeft size={12} /> Back
-                  </button>
-
+              <div className="flex-grow min-h-0 flex flex-col animate-fade-in relative">
+                {/* TOP NAVIGATION */}
+                <div className="flex justify-between items-center p-6 border-b border-white/10 z-20 bg-black/20">
+                  <button onClick={prevPage} className="px-4 py-1.5 border border-white/20 rounded-full text-[#dcb897] text-[9px] uppercase tracking-[0.2em] hover:bg-white/10 transition-all">Back</button>
                   <div className="flex flex-col items-center">
-                    <span className={`${theme.goldText} text-[10px] font-bold tracking-[0.3em] uppercase`}>{pages[page - 1].title}</span>
-                    <span className="text-[8px] text-[#4a5568] tracking-[0.2em]">{page} / {pages.length}</span>
+                    <span className="text-[#ffb05c] text-[11px] font-bold tracking-[0.2em] uppercase">{pages[page - 1].title}</span>
+                    <span className="text-[8px] text-white/50 tracking-[0.2em] uppercase mt-1">{pages[page - 1].subtitle}</span>
                   </div>
-
-                  <button
-                    onClick={nextPage}
-                    className="flex items-center gap-1 px-4 py-1.5 border-2 border-[#d4af37] rounded-full text-[#d4af37] text-[9px] font-bold uppercase tracking-[0.2em] hover:bg-[#d4af37] hover:text-black transition-all active:scale-95 shadow-[0_0_10px_rgba(212,175,55,0.2)]"
-                  >
-                    {page === pages.length ? "Finish" : "Next"} <ChevronRight size={12} />
+                  <button onClick={nextPage} className="px-5 py-1.5 border-2 border-[#ffb05c] rounded-full text-[#ffb05c] text-[9px] font-bold uppercase tracking-[0.2em] shadow-[0_0_15px_rgba(255,176,92,0.2)] hover:bg-[#ffb05c] hover:text-[#15100c] transition-all">
+                    {page === pages.length ? "Finish" : "Next"}
                   </button>
                 </div>
 
-                {/* Scrollable Content Area */}
-                <div className="flex-grow overflow-y-auto custom-scrollbar relative px-8 py-4">
-                  <div className="mt-4 flex flex-col items-center pb-12">
-                    <div className="text-3xl mb-8 drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]">{pages[page - 1].icon}</div>
-                    <p className="text-[12px] md:text-[14px] leading-[1.7] font-cursive text-center text-[#f1f5f9] whitespace-pre-line tracking-wide">
-                      {pages[page - 1].content}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Subtle Progress Bar at Bottom */}
-                <div className="h-1 w-full bg-white/5">
-                  <div className="h-full bg-[#d4af37]/40 transition-all duration-500" style={{ width: `${(page / pages.length) * 100}%` }}></div>
+                {/* CONTENT AREA */}
+                <div className="flex-grow min-h-0 overflow-y-auto custom-scrollbar relative px-8 py-6">
+                  {/* TIME LOCK LOGIC ON FINAL PAGE */}
+                  {(page === pages.length && !isUnlocked) ? (
+                    <div className="mt-12 flex flex-col items-center justify-center animate-pulse">
+                      <Lock className="text-[#ffb05c] mb-6 opacity-60" size={40} />
+                      <p className="text-[#dcb897] text-center text-[12px] uppercase tracking-[0.3em] mb-10">Future Encrypted</p>
+                      <p className="text-[20px] md:text-[23px] leading-[1.8] font-cursive text-center text-[#fdfbf7] blur-md select-none">
+                        {pages[page - 1].content}
+                      </p>
+                      <div className="mt-10 p-4 border border-[#ffb05c]/30 rounded-lg bg-black/30">
+                        <p className="text-[10px] text-[#ffb05c] tracking-widest uppercase text-center">This chapter unlocks at 14:00 IST</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="mt-2 flex flex-col items-center pb-12">
+                      <div className="text-4xl mb-8 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">{pages[page - 1].icon}</div>
+                      <p className="text-[21px] md:text-[24px] leading-[1.8] font-cursive text-center text-[#fdfbf7] whitespace-pre-line tracking-wide drop-shadow-md">
+                        {pages[page - 1].content}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
 
             {/* END CREDITS */}
             {page > pages.length && (
-              <div className="p-10 flex-grow flex flex-col relative overflow-hidden">
-                <div className="animate-fade-in text-center my-auto flex flex-col items-center z-10">
-                  <Sparkles size={35} className="text-[#d4af37] mb-8 animate-pulse" />
-                  <h2 className={`text-4xl ${theme.silverText} font-cursive mb-6 tracking-wide`}>The Universe is Ours</h2>
-                  <p className="text-[#94a3b8] font-light text-[15px] leading-relaxed mb-10 px-6 tracking-wide italic">
-                    "Every star in the sky is a testament to the time I am willing to wait, and the love I am ready to give."
-                  </p>
-                  <div className={`w-20 h-[1px] bg-[#d4af37]/40 mb-8`}></div>
-                  <p className={`${theme.goldText} tracking-[0.5em] uppercase text-[9px]`}>See you in our orbit</p>
-                  <button onClick={() => setPage(1)} className="mt-12 px-8 py-2.5 border border-[#d4af37] text-[#d4af37] text-[10px] uppercase tracking-[0.4em] rounded-full hover:bg-[#d4af37] hover:text-black transition-all font-bold">
-                    Restart Journey
-                  </button>
+              <div className="p-10 flex-grow flex flex-col relative overflow-hidden animate-fade-in bg-[rgba(30,20,15,0.9)]">
+                <div className="text-center my-auto flex flex-col items-center z-10">
+                  <Heart size={35} fill="#ffb05c" className="text-[#ffb05c] mb-8 animate-pulse drop-shadow-[0_0_15px_rgba(255,176,92,0.6)]" />
+                  <h2 className="text-4xl text-[#fdfbf7] font-cursive mb-6 tracking-wide">Welcome Home</h2>
+                  <p className="text-[#dcb897] font-light text-[15px] leading-relaxed mb-10 px-6 tracking-wide italic">"I will spend my life making sure you never feel cold."</p>
+                  <div className="w-24 h-[1px] bg-[#ffb05c]/40 mb-8"></div>
+                  <p className="text-[#ffb05c] tracking-[0.6em] uppercase text-[10px] font-bold">Forever Yours</p>
+                  <button onClick={() => { setPage(1); triggerEmberPulse(); }} className="mt-12 px-8 py-2.5 border border-[#ffb05c]/50 text-[#ffb05c] text-[9px] uppercase tracking-[0.4em] rounded-full hover:bg-white/10 transition-all">Read Again</button>
                 </div>
               </div>
             )}
@@ -287,21 +384,19 @@ In the cosmic years ahead.`
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600&display=swap');
         .font-cursive { font-family: 'Caveat', cursive; }
-        .star-bg {
-          background-image: radial-gradient(1.5px 1.5px at 20px 30px, #ffffff, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 150px 150px, #ffffff, rgba(0,0,0,0)), radial-gradient(2px 2px at 80px 230px, #d4af37, rgba(0,0,0,0));
-          background-repeat: repeat; background-size: 300px 300px;
-        }
-        @keyframes starPulse { 0% { transform: scale(0); opacity: 0; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(0); opacity: 0; } }
-        .animate-star-pulse { animation: starPulse ease-in-out forwards; }
-        .animate-fade-in { animation: fadeIn 1s ease-out; }
-        .animate-fade-in-up { animation: fadeInUp 0.8s ease-out both; }
+        .hearth-ring { position: absolute; border-radius: 50%; animation: hearthPulse 4s ease-in-out infinite; }
+        @keyframes hearthPulse { 0%, 100% { transform: scale(1); opacity: 0.2; } 50% { transform: scale(1.05); opacity: 0.5; border-width: 2px; } }
+        @keyframes floatUp { 0% { transform: translateY(0) scale(1); opacity: 0; } 20% { opacity: 0.8; } 100% { transform: translateY(-200px) scale(0.5); opacity: 0; } }
+        .animate-float-up { animation: floatUp ease-in forwards; }
+        .animate-fade-in { animation: fadeIn 1.2s ease-out; }
+        .animate-fade-in-up { animation: fadeInUp 1s ease-out both; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .custom-scrollbar::-webkit-scrollbar { width: 3px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.3); border-radius: 10px; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 176, 92, 0.4); border-radius: 10px; }
       `}</style>
     </div>
   );
 };
 
-export default RoyalLetter;
+export default CozyLifetimeLetter;
