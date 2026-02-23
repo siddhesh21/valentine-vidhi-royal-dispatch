@@ -1,182 +1,134 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronRight, ChevronLeft, Flame, Heart, Home, Lock } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Flame, Heart, Home } from 'lucide-react';
 
 const CozyLifetimeLetter = () => {
   const [stage, setStage] = useState('journey');
   const [page, setPage] = useState(0);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-  const [daysPast, setDaysPast] = useState(0);
   const [embers, setEmbers] = useState([]);
   const [progress, setProgress] = useState(0);
-  const [isUnlocked, setIsUnlocked] = useState(false);
 
   const startDate = new Date('2025-10-26T00:00:00+05:30');
   const targetDate = new Date('2026-03-14T00:00:00+05:30');
   const totalDuration = targetDate - startDate;
 
-  // --- TIME LOCK LOGIC (IST) ---
-  useEffect(() => {
-    const checkTime = () => {
-      const now = new Date();
-      const istTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
-      const hours = istTime.getHours();
-      // Unlocks at or after 2 PM (14:00) IST
-      if (hours >= 14) {
-        setIsUnlocked(true);
-      } else {
-        setIsUnlocked(false);
-      }
-    };
-    checkTime();
-    const timer = setInterval(checkTime, 60000);
-    return () => clearInterval(timer);
-  }, []);
-
   const pages = [
     {
-      title: "Our Late 20s",
-      subtitle: "The Beginning of Home",
-      icon: "🪴",
+      title: "The Quiet Beginning",
+      subtitle: "Not seizing, but keeping",
+      icon: "🕯️",
       color: "rgba(139, 69, 19, 0.8)", // Warm Terracotta
       border: "border-[#d27d2d]",
-      content: `This is where we are brave enough to choose each other fully.
+      align: "center",
+      content: `We did not fall in love loudly.
+There were no violins,
+no grand declarations echoing through marble halls.
 
-We found each other at the right time — not when life was easy, but when we were ready. We commit to our bond not because it is convenient, but because it feels steady. We get married not out of pressure, but out of certainty.
+It began with a look held a second too long.
+A nervous laugh.
+Two people pretending they were calmer than they were.
 
-You move countries. You move your life. You trust me enough to build beside me.
+And somewhere between
+first drives and unfinished conversations,
+between shared meals and stolen glances,
+we began building something
+we did not yet have the courage to name.
 
-We learn how to live together — not perfectly, but intentionally. We figure out where the mugs go. We argue over shelf space. We learn each other’s rhythms — your quiet mornings, my late nights. We become fluent in each other’s moods.
+We were young —
+not reckless,
+but brave enough.
 
-You build your brand with focus and courage. I watch you sit at a desk near the window, sketchbook open, ideas spilling out of you. Your name begins to mean something. Your art begins to travel further than we do.
+Brave enough to choose
+when distance stood waiting.
+Brave enough to promise
+before the world gave permission.
 
-I grow in my career, steady and disciplined. We motivate each other to stay sharp, to stay hungry.
+You handed me a painting once —
+not just of a machine I used to ride,
+but of who I was when I felt most free.
+And I understood then:
+love is when someone preserves
+the parts of you you’re afraid of losing.
 
-We travel for our honeymoon — somewhere that feels like a dream we whispered about. Later, Japan. Later, under the northern lights, holding your gloved hands in mine. We get a small cat that rules the house like royalty.
+We have said goodbye already.
+We have watched airports swallow hours.
+We have learned how heavy a quiet room can feel
+after laughter leaves it.
 
-We work out together. Not for vanity — but for longevity. For the promise of many decades ahead.
+And still —
+we remain.
 
-In these years, we are building. Learning. Becoming.`
+Not because it is easy,
+but because it is certain.
+
+There is something sacred
+about choosing the same person
+again and again,
+even when oceans sit between you.
+
+In our late twenties,
+we are not merely dreaming —
+we are constructing.
+Brick by careful brick.
+Promise by promise.
+
+One day we will wake in a house
+that smells like coffee and paint,
+with sunlight slipping across wooden floors,
+and we will not remember
+how strange it once felt
+to sleep without each other.
+
+And when we are old —
+truly old —
+when our hands are softer
+and our steps slower,
+I hope we look at each other
+with the same quiet recognition:
+
+We were brave enough.
+We chose well.
+We built something that lasted.
+
+Carpe diem, they said.
+Seize the day.
+
+But with you,
+I do not wish to seize anything.
+
+I wish to hold it.
+Steadily.
+Gently.
+For a lifetime.`
     },
     {
-      title: "Early to Mid 30s",
-      subtitle: "Expansion",
-      icon: "🖼️",
-      color: "rgba(184, 115, 51, 0.8)", // Rich Copper
-      border: "border-[#cd7f32]",
-      content: `By now, We will enter our newly purchased house and start to make it our home and soon it will feel like US lived in. It smells like us.
-
-Your exhibitions grow. Not small gallery corners — full rooms. Your paintings hang under proper lighting. People stand quietly in front of your work, studying it. I stand in the back, watching you more than the art.
-
-You step onto bigger platforms. You own your voice.
-
-We begin to talk seriously about welcoming someone new into our lives. A child. A heartbeat. A new laugh in our home. We prepare not just financially — but emotionally. We strengthen ourselves for it.
-
-If we are blessed with children, we support each other relentlessly. Late nights become shared shifts. Stress becomes shared responsibility. We protect each other’s mental health fiercely.
-
-We still walk in the evenings. Still hold hands. Still choose each other.`
-    },
-    {
-      title: "Late 30s",
-      subtitle: "Rooted and Rising",
-      icon: "🌳",
-      color: "rgba(31, 61, 43, 0.8)", // Deep Forest Green
-      border: "border-[#4f7942]",
-      content: `By now, your exhibitions feel prestigious. Invitations come without you chasing them. Your name carries weight.
-
-We are more established — in business, in career, in identity.
-
-The children grow. We grow with them.
-
-We stay disciplined about our health. We refuse to let exhaustion swallow us whole. We lift weights. We stretch. We remind each other to drink water and sleep.
-
-We travel more intentionally now. Not rushed. Not chaotic. We savor places.
-
-And even with full schedules and growing responsibilities, we still look at each other across the room and feel that same pull from our first years.`
-    },
-    {
-      title: "Our 40s",
-      subtitle: "Reflection and Strength",
-      icon: "🍷",
-      color: "rgba(74, 21, 75, 0.8)", // Deep Plum
-      border: "border-[#800020]",
-      content: `We celebrate 15 years together with children who know what steady love looks like.
-
-We take care of our health seriously. We check in with each other — physically and emotionally. We understand that longevity is a gift we must protect.
-
-We go on date nights because we want to — not because we need to fix something.
-
-We look back at what we built from nothing. The business. The art. The home. The family.
-
-We admire each other more than we did when we were young — because now admiration is earned daily.
-
-We teach our children values not just through words, but through example: discipline, loyalty, kindness, strength.`
-    },
-    {
-      title: "Our 50s",
-      subtitle: "A Softer Season",
-      icon: "🍂",
-      color: "rgba(139, 101, 8, 0.8)", // Warm Amber
-      border: "border-[#daa520]",
-      content: `Some of the children begin to leave the nest. The house grows quieter again.
-
-We allow ourselves to be selfish in the sweetest way. More travel. More long mornings. More spontaneous drives.
-
-We settle closer to nature. The house we dreamed of becomes real — open land, animals, a garden we pretend we fully understand.
-
-There’s a garage with vintage cars and motorcycles. You shake your head at me, but you smile every time.
-
-We built this. Slowly. Together.`
-    },
-    {
-      title: "Our 60s",
-      subtitle: "Legacy and Guidance",
-      icon: "🕰️",
-      color: "rgba(26, 43, 76, 0.8)", // Deep Navy
-      border: "border-[#4682b4]",
-      content: `Now we guide more than we build.
-
-Our children come to us for advice — not because they have to, but because they trust us. We help them through their life decisions without controlling them.
-
-We stay fit. We stay active. We lift our grandchildren into the air. We play with them. We tell them stories — stories we documented. Stories from the beginning.
-
-We travel as a big family sometimes. We sit at the head of the table, not out of authority — but out of years earned.`
-    },
-    {
-      title: "Our 70s",
-      subtitle: "Back to Us",
-      icon: "☕",
-      color: "rgba(47, 79, 79, 0.8)", // Slate Gray/Blue
-      border: "border-[#708090]",
-      content: `Life slows again.
-
-We travel simply because we can. We revisit places that meant something. We sit quietly in parks, on benches, in small cafés.
-
-Sometimes we laugh remembering how young and serious we were when we first started dating. How intense everything felt. How dramatic distance once seemed.
-
-We hold hands not out of habit — but out of preference.`
-    },
-    {
-      title: "Our 80s, 90s, 100s",
-      subtitle: "The Two of Us",
-      icon: "🕯️",
+      title: "To Vidhi",
+      subtitle: "17 Days",
+      icon: "💌",
       color: "rgba(96, 16, 16, 0.8)", // Rich Crimson
       border: "border-[#b22222]",
-      content: `At some point, it becomes just us again.
+      align: "left",
+      content: `My love,
 
-Generations gather around us. Children. Grandchildren. Their children.
+I know and understand what you’re going through. I can feel the emotional weight you’re carrying — the excitement of me coming to you in 17 days, and at the same time the tenderness and uncertainty your family is facing right now. That kind of emotional contrast can feel like a see-saw — joy pulling one way, worry pulling the other — and it can make everything inside you feel misaligned.
 
-They look at us and see what endurance looks like. What health looks like. What love maintained with discipline looks like.
+If your emotions feel scattered or distant at times, please know that I understand. Nothing about this is simple. You are allowed to feel both happiness and heartbreak in the same breath.
 
-We are proud — not of wealth, not of status — but of the way we treated each other.
+Keep your heart steady for your family, and for yourself. Gather your strength for your mom — my soon-to-be mother-in-law — and let yourself feel what needs to be felt. Don’t hold it in. Let the emotions pour out instead of sitting heavy inside you.
 
-In the end, it was always simple.
+When I arrive, things may or may not look the way we imagined. The days may unfold differently than we planned. And that’s okay. I am content simply being in your presence. I don’t need perfection. I don’t need a perfect atmosphere. I just need you.
 
-We chose each other.
-We protected each other.
-We grew beside each other.
-We never stopped walking next to one another.
+Please don’t exhaust yourself trying to manage every emotion at once. Focus on what is in front of you right now. One moment at a time. You are stronger than you realise, and I know you are doing the best you can.
 
-And even after all the decades, when the house is quiet and the lights are low, it is still just two people who once met in their late 20s — brave enough to say yes.`
+Whatever comes, we will experience it as it is — together. No forcing, no resisting. Just being present in it.
+
+I pray for your safety, for your heart to be protected, for healing in your toe, and for your family to be carried through this delicate time with peace and strength.
+
+I love you. I miss you. I am here — not just for today, but for our lifetime.
+
+Take care, Vidhi.
+
+— Your soon-to-be husband`
     }
   ];
 
@@ -193,7 +145,6 @@ And even after all the decades, when the house is quiet and the lights are low, 
         });
       }
       const timeSinceStart = now - startDate;
-      setDaysPast(Math.floor(timeSinceStart / (1000 * 60 * 60 * 24)));
       setProgress(Math.min(100, Math.max(0, (timeSinceStart / totalDuration) * 100)));
     }, 1000);
     return () => clearInterval(timer);
@@ -210,7 +161,7 @@ And even after all the decades, when the house is quiet and the lights are low, 
     const newEmbers = Array.from({ length: 12 }).map((_, i) => ({
       id: Date.now() + i,
       left: Math.random() * 100,
-      top: 100 + Math.random() * 20, // Start from bottom
+      top: 100 + Math.random() * 20,
       size: 4 + Math.random() * 6,
       animationDuration: 3 + Math.random() * 4,
       delay: Math.random() * 0.5,
@@ -222,13 +173,11 @@ And even after all the decades, when the house is quiet and the lights are low, 
   const nextPage = () => { setPage(prev => prev + 1); triggerEmberPulse(); };
   const prevPage = () => setPage(prev => prev - 1);
 
-  // Math for the cozy spiral toward the hearth
   const angle = progress * 0.1 * Math.PI * 4;
   const radius = 180 * (1 - progress / 100);
   const posX = Math.cos(angle) * radius;
   const posY = Math.sin(angle) * radius;
 
-  // Determine dynamic background color for reading stage
   const currentCardColor = page > 0 && page <= pages.length ? pages[page - 1].color : "rgba(30, 20, 15, 0.9)";
   const currentBorderColor = page > 0 && page <= pages.length ? pages[page - 1].border : "border-[#d4af37]/30";
 
@@ -262,7 +211,6 @@ And even after all the decades, when the house is quiet and the lights are low, 
         <div className="flex flex-col items-center justify-center animate-fade-in w-full max-w-3xl p-6 z-10">
           <h2 className="text-[#fcdbb6] text-xl mb-32 tracking-[0.4em] uppercase font-light text-center">The Journey Home</h2>
           <div className="relative w-80 h-80 flex items-center justify-center">
-            {/* The Hearth / Home Glow */}
             <div className="absolute w-32 h-32 bg-[#ff8c00] rounded-full blur-[70px] opacity-40 animate-pulse"></div>
             <div className="hearth-ring w-64 h-64 border border-[#ffb05c]/20 rounded-full"></div>
             <div
@@ -316,14 +264,14 @@ And even after all the decades, when the house is quiet and the lights are low, 
               <div className="p-10 flex-grow flex flex-col animate-fade-in">
                 <div className="text-center my-auto">
                   <Flame size={45} className="mx-auto mb-10 text-[#ffb05c] animate-pulse drop-shadow-[0_0_15px_rgba(255,176,92,0.6)]" />
-                  <h1 className="text-4xl md:text-5xl text-[#fdfbf7] font-cursive mb-6 tracking-wide">The Life We Will Build</h1>
-                  <p className="font-light text-[#dcb897] mb-12 px-6 text-[11px] tracking-[0.3em] uppercase leading-relaxed">A promise of the years ahead</p>
+                  <h1 className="text-4xl md:text-5xl text-[#fdfbf7] font-cursive mb-6 tracking-wide">Steady & Gentle</h1>
+                  <p className="font-light text-[#dcb897] mb-12 px-6 text-[11px] tracking-[0.3em] uppercase leading-relaxed">Not seizing, but keeping.</p>
                   <button onClick={nextPage} className="mx-auto flex items-center gap-3 border-2 border-[#ffb05c] px-8 py-3 text-[#ffb05c] text-[11px] font-bold uppercase tracking-[0.4em] rounded-full shadow-[0_0_20px_rgba(255,176,92,0.2)] hover:bg-[#ffb05c] hover:text-[#15100c] transition-all duration-300">Open Door <ChevronRight size={16} /></button>
                 </div>
               </div>
             )}
 
-            {/* THE DECADES */}
+            {/* THE CONTENT */}
             {page > 0 && page <= pages.length && (
               <div className="flex-grow min-h-0 flex flex-col animate-fade-in relative">
                 {/* TOP NAVIGATION */}
@@ -340,26 +288,12 @@ And even after all the decades, when the house is quiet and the lights are low, 
 
                 {/* CONTENT AREA */}
                 <div className="flex-grow min-h-0 overflow-y-auto custom-scrollbar relative px-8 py-6">
-                  {/* TIME LOCK LOGIC ON FINAL PAGE */}
-                  {(page === pages.length && !isUnlocked) ? (
-                    <div className="mt-12 flex flex-col items-center justify-center animate-pulse">
-                      <Lock className="text-[#ffb05c] mb-6 opacity-60" size={40} />
-                      <p className="text-[#dcb897] text-center text-[12px] uppercase tracking-[0.3em] mb-10">Future Encrypted</p>
-                      <p className="text-[20px] md:text-[23px] leading-[1.8] font-cursive text-center text-[#fdfbf7] blur-md select-none">
-                        {pages[page - 1].content}
-                      </p>
-                      <div className="mt-10 p-4 border border-[#ffb05c]/30 rounded-lg bg-black/30">
-                        <p className="text-[10px] text-[#ffb05c] tracking-widest uppercase text-center">This chapter unlocks at 14:00 IST</p>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="mt-2 flex flex-col items-center pb-12">
-                      <div className="text-4xl mb-8 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">{pages[page - 1].icon}</div>
-                      <p className="text-[21px] md:text-[24px] leading-[1.8] font-cursive text-center text-[#fdfbf7] whitespace-pre-line tracking-wide drop-shadow-md">
-                        {pages[page - 1].content}
-                      </p>
-                    </div>
-                  )}
+                  <div className="mt-2 flex flex-col pb-12 items-center">
+                    <div className="text-4xl mb-8 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)] text-center">{pages[page - 1].icon}</div>
+                    <p className={`text-[21px] md:text-[24px] leading-[1.8] font-cursive text-[#fdfbf7] whitespace-pre-line tracking-wide drop-shadow-md w-full ${pages[page - 1].align === 'left' ? 'text-left' : 'text-center'}`}>
+                      {pages[page - 1].content}
+                    </p>
+                  </div>
                 </div>
               </div>
             )}
@@ -369,7 +303,7 @@ And even after all the decades, when the house is quiet and the lights are low, 
               <div className="p-10 flex-grow flex flex-col relative overflow-hidden animate-fade-in bg-[rgba(30,20,15,0.9)]">
                 <div className="text-center my-auto flex flex-col items-center z-10">
                   <Heart size={35} fill="#ffb05c" className="text-[#ffb05c] mb-8 animate-pulse drop-shadow-[0_0_15px_rgba(255,176,92,0.6)]" />
-                  <h2 className="text-4xl text-[#fdfbf7] font-cursive mb-6 tracking-wide">Welcome Home</h2>
+                  <h2 className="text-4xl text-[#fdfbf7] font-cursive mb-6 tracking-wide">End of Transmission</h2>
                   <p className="text-[#dcb897] font-light text-[15px] leading-relaxed mb-10 px-6 tracking-wide italic">"I will spend my life making sure you never feel cold."</p>
                   <div className="w-24 h-[1px] bg-[#ffb05c]/40 mb-8"></div>
                   <p className="text-[#ffb05c] tracking-[0.6em] uppercase text-[10px] font-bold">Forever Yours</p>
