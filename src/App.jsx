@@ -13,244 +13,135 @@ const CozyLifetimeLetter = () => {
 
   const pages = [
     {
-      title: "Cat Woman Energy",
-      subtitle: "1% husband, 99% staff",
-      icon: "🐾",
+      title: "If the Sunflowers Could Speak",
+      subtitle: "Carrying light without the sun",
+      icon: "🌻",
+      color: "rgba(184, 134, 11, 0.8)", // Dark Goldenrod
+      border: "border-[#daa520]",
+      align: "center",
+      content: `Sometimes I wonder
+if the sunflowers envy you.
+
+If they stand tall in their fields
+stretching toward the morning,
+and whisper to one another,
+
+“How does she carry light
+without needing the sun?”
+
+They bloom so boldly,
+faces lifted without fear,
+golden and certain.
+
+But you —
+you bloom in quieter ways.
+
+In the way you paint near a window.
+In the way you hold your family close
+even when your own heart feels heavy.
+In the way you love deeply,
+without thorns, without performance.
+
+I imagine the sunflowers watching you,
+their petals trembling in the breeze,
+
+asking how you learned
+to glow without trying.
+
+They turn their heads all day
+to follow the light.
+
+You are the light.
+
+And sometimes I want to gather you in my arms
+the way one would gather sunflowers —
+carefully, protectively —
+shield you from harsh winds,
+from jealous hours,
+from distance,
+from anything that dares dim you.
+
+But you were never meant
+to be placed in a vase.
+
+You were meant to stand tall in open fields,
+roots firm,
+face lifted,
+unapologetically radiant.
+
+Time cannot wilt what you carry.
+
+Not the miles between us.
+Not the seasons we walk through.
+Not even the fragile days
+when joy and sorrow sit side by side.
+
+One day we will wake
+in a home filled with soft morning light,
+maybe with a cat weaving between our legs,
+coffee cooling on the table,
+your sunflowers resting near the window —
+
+and I will look at you
+the way they look at the sky.
+
+Certain.
+Grateful.
+Still in awe.
+
+If the sunflowers could speak,
+I think they would not envy you after all.
+
+They would simply turn toward you
+and understand —
+
+that some things
+do not bloom for a season.
+
+They bloom for a lifetime.`
+    },
+    {
+      title: "To Vidhi",
+      subtitle: "Building Us",
+      icon: "💌",
       color: "rgba(139, 69, 19, 0.8)", // Warm Terracotta
       border: "border-[#d27d2d]",
-      content: `You’ve basically been trained by Susie & Mew your whole life… which explains why you expect royal treatment.
+      align: "left",
+      content: `My love,
 
-Don’t worry.
-When we live together, we’ll adopt a cat.
+Yesterday felt refreshing in the most beautiful way. Seeing you in that sundress… I don’t even know how to describe it properly. You looked effortless. Soft. Radiant. I wished I was there, not just to admire you with words, but to hold you, to caress you gently, to appreciate you the way you deserve — slowly and fully.
 
-And I fully accept that I’ll be:
-1% husband
-99% staff.
+I loved the feeling between us — that quiet shift, that warmth building, the way we slip into a mood only we understand. I know life will have its ups and downs, uncertainties and moments we cannot predict. But I choose to stay positive. I pray for our health, for peace around us, for energy that protects what we are building. I don’t want anything heavy or negative to touch what feels so alive between us. That mundane, disconnected feeling — I never want that for us.
 
-But that’s okay.
+I love when you appreciate my messages and gestures out loud. I love how you make your attraction toward me so obvious — the way it shows on your face, the way you don’t hide it. It’s the cutest, most powerful thing. The more I know you, the more I want to keep knowing you. I don’t ever want to stop discovering you.
 
-Because if loving you means loving cats,
-then consider me permanently paws-itively committed.`
-    },
-    {
-      title: "Sushi & Sips",
-      subtitle: "Delicate & Dangerous",
-      icon: "🍣",
-      color: "rgba(184, 115, 51, 0.8)", // Rich Copper
-      border: "border-[#cd7f32]",
-      content: `You love sushi.
-Delicate. Precise. A little addictive.
+I love being in love with you.
 
-You love Cosmos.
-Pretty. Dangerous. Misleadingly strong.
+I admire you deeply. I want to see you happy — not just sometimes, but fully. I want to protect you from negativity that drains you. I want to surround you with a love that feels safe, passionate, and grounding. I want to care for the parts of you that are soft, ambitious, creative, and even the parts that overthink.
 
-Honestly?
-That checks out.
+I want us to grow — in our careers, in our craft, in our discipline. I care about our excellence, our health, our wealth, the way we move through life intentionally… with the occasional weekends of harmless mischief that belong only to us.
 
-You look sweet,
-but you hit like a double shot.
+What I want from you is comfort, emotional openness, support. I want us planning together, grinding together, building toward our goals as a team — not competing, not dragging — but lifting.
 
-From now on, I volunteer as:
-• Your sushi date partner
-• Your official Cosmo taste tester
-• And the man who makes sure you get home safely after “just one more”`
-    },
-    {
-      title: "Bodycare Queen",
-      subtitle: "Strawberries & Softness",
-      icon: "🍓",
-      color: "rgba(148, 56, 85, 0.8)", // Berry Pink
-      border: "border-[#c85a7c]",
-      content: `Strawberry body butter.
-Glycolic acid for rough corners.
-Under-eye care. Hair rituals.
+Thank you for being patient with me. Thank you for choosing a life beside me. From here onward, I choose you — in every moment, in every decision. I think of us constantly. Of what we are building. Of what we will become.
 
-You don’t “get ready.”
-You curate yourself.
+Let’s build us.
+Let’s protect us.
+Let’s love us.
+Let’s work for us.
+Let’s create a home filled with warmth for us.
+And one day, for our children.
 
-And I love that you take care of your skin the way I plan to take care of you — consistently, attentively, intentionally.
+You will marry me.
 
-Also, let’s be honest…
-If you smell like strawberries and softness,
-I will absolutely pretend I need “moisturizer advice” just to get closer.`
-    },
-    {
-      title: "Books & Brushstrokes",
-      subtitle: "Building Worlds",
-      icon: "📚🎨",
-      color: "rgba(31, 61, 43, 0.8)", // Deep Forest Green
-      border: "border-[#4f7942]",
-      content: `You read stories that make your cheeks warm.
+And I will spend my life choosing you — again and again.
 
-You paint stories that make rooms quiet.
-
-One feeds your imagination.
-The other feeds your soul.
-
-And me?
-
-I plan to:
-• Let you experience the fantasies you underline.
-• Stand in the back of your exhibitions watching people admire your work.
-• And quietly admire the artist even more.
-
-You create worlds on canvas.
-I just want to build one with you.`
-    },
-    {
-      title: "Miniature Magic",
-      subtitle: "Tiny Kingdoms",
-      icon: "🏠✨",
-      color: "rgba(139, 101, 8, 0.8)", // Warm Amber
-      border: "border-[#daa520]",
-      content: `You don’t just build DIY book nooks.
-
-You build tiny universes.
-
-Little windows.
-Little lights.
-Little doors to imaginary places.
-
-Which makes sense…
-
-Because you walked into my life and turned it into a carefully crafted scene too.
-
-When we live together,
-I expect at least one shelf dedicated to your tiny kingdoms.
-
-And I’ll help you glue the roof — badly — but enthusiastically.`
-    },
-    {
-      title: "Dessert Diplomacy",
-      subtitle: "Sweet meets Deep",
-      icon: "🍰",
-      color: "rgba(92, 64, 51, 0.8)", // Dark Chocolate
-      border: "border-[#8b5a2b]",
-      content: `You: Tiramisu, vanilla, roasted almond, Biscoff, salted caramel.
-Me: Dark chocolate. Belgian. Madagascar. Intense.
-
-We are literally a dessert metaphor.
-
-Soft meets bold.
-Sweet meets deep.
-
-From now on, every city we visit, we rate Tiramisu.
-
-Scorecard. Photos. Debate.
-
-Because loving you means committing to a lifetime of “just one more bite.”`
-    },
-    {
-      title: "Stickers & Archaeology",
-      subtitle: "Discovering Stories",
-      icon: "🧸📜",
-      color: "rgba(160, 120, 90, 0.8)", // Warm Parchment/Clay
-      border: "border-[#c29b78]",
-      content: `You collect cute stickers like artifacts.
-
-You’d probably enjoy brushing dust off a 3,000-year-old vase.
-
-Which means one thing:
-
-You love discovering stories.
-
-And one day, when someone asks how we started,
-you’ll smile and say,
-
-“Oh, that one?
-That was my favorite excavation.”`
-    },
-    {
-      title: "Massage Policy",
-      subtitle: "Lifelong Subscription",
-      icon: "💆🏻‍♀️",
-      color: "rgba(74, 21, 75, 0.8)", // Deep Plum
-      border: "border-[#800020]",
-      content: `You love massages.
-
-Lower back.
-Scalp.
-Feet.
-Hands.
-
-Consider this a lifelong subscription.
-
-No booking required.
-No time limit.
-Unlimited refills.
-
-And I take my job very seriously.`
-    },
-    {
-      title: "French Beading & Preserved Flowers",
-      subtitle: "Gathering Reminders",
-      icon: "🌸",
-      color: "rgba(180, 100, 130, 0.8)", // Rose Mauve
-      border: "border-[#d88ba6]",
-      content: `You turn flowers into art that never fades.
-
-So I’m collecting stems now — small ones — to preserve.
-
-Because if you can freeze beauty in beads,
-I can preserve pieces of places I go…
-and bring them back to you.
-
-Little reminders that even when I travel,
-I am always gathering things with you in mind.`
-    },
-    {
-      title: "Accessories & That Look",
-      subtitle: "Weaponized Elegance",
-      icon: "💍",
-      color: "rgba(26, 43, 76, 0.8)", // Deep Navy
-      border: "border-[#4682b4]",
-      content: `Thin necklaces.
-Elegant rings.
-Personalised anklet with my initial.
-
-Tattoos that mean something.
-
-And Jhumkas?
-
-I lose focus every single time.
-
-You don’t just wear accessories.
-You weaponize elegance.
-
-Winter version of you — layered, chic, holding my arm —
-is going to be unfair to the rest of the world.`
-    },
-    {
-      title: "Perfume, Silk & That Walk",
-      subtitle: "Leaving a Memory",
-      icon: "🌺",
-      color: "rgba(96, 16, 16, 0.8)", // Rich Crimson
-      border: "border-[#b22222]",
-      content: `You love perfumes that are intense and summery.
-
-Which means you like leaving a memory before you leave a room.
-
-I’m bringing one I chose for you.
-
-Something that makes me think:
-“This is hers.”
-
-Sundresses in summer.
-Layers in winter.
-Coach bag.
-Victoria’s Secret surprises waiting.
-
-You look dreamy in soft light.
-You look powerful in structured outfits.
-
-But my favorite look?
-
-You walking toward me.`
+My Vidhi and just mine`
     }
   ];
 
-  // Icons used for the "pulling into the hearth" animation
-  const floatingIcons = ['🐾', '🍣', '🍓', '📚', '🏠', '🍰', '🧸', '💆🏻‍♀️', '🌸', '💍', '🌺'];
+  // Updated icons for the sunflower & love letter theme pulling into the center
+  const floatingIcons = ['🌻', '✨', '💛', '💌', '🌻', '🌿', '💛', '🌻', '✨', '🤍'];
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -276,7 +167,7 @@ You walking toward me.`
     return () => clearInterval(timer);
   }, []);
 
-  // Set journey stage to last a bit longer (12 seconds) so she can admire the orbits
+  // Set journey stage to last 12 seconds
   useEffect(() => {
     if (stage === 'journey') {
       const timer = setTimeout(() => setStage('arrived'), 12000);
@@ -299,6 +190,8 @@ You walking toward me.`
 
   const nextPage = () => { setPage(prev => prev + 1); triggerEmberPulse(); };
   const prevPage = () => setPage(prev => prev - 1);
+  const isSecondPage = page === 2;
+  const isPoemPage = page === pages.length;
 
   const currentCardColor = page > 0 && page <= pages.length ? pages[page - 1].color : "rgba(30, 20, 15, 0.9)";
   const currentBorderColor = page > 0 && page <= pages.length ? pages[page - 1].border : "border-[#d4af37]/30";
@@ -375,11 +268,10 @@ You walking toward me.`
 
             {/* ITEMS PULLING INTO CENTER */}
             {floatingIcons.map((icon, index) => {
-              // Calculate random starting points on the outer edges
               const angle = (index / floatingIcons.length) * (2 * Math.PI);
-              const startX = Math.cos(angle) * 350; // 350px radius
+              const startX = Math.cos(angle) * 350;
               const startY = Math.sin(angle) * 350;
-              const delay = index * 0.8; // Stagger the animations
+              const delay = index * 0.8;
 
               return (
                 <div
@@ -389,7 +281,7 @@ You walking toward me.`
                     '--startX': `${startX}px`,
                     '--startY': `${startY}px`,
                     animationDelay: `${delay}s`,
-                    opacity: 0 // hidden initially
+                    opacity: 0
                   }}
                 >
                   {icon}
@@ -429,9 +321,9 @@ You walking toward me.`
 
       {/* STAGE 4: READING */}
       {stage === 'reading' && (
-        <div className="relative w-full max-w-lg p-4 z-10">
+        <div className={`relative w-full p-4 z-10 transition-all duration-500 ${isSecondPage ? 'max-w-2xl' : 'max-w-lg'}`}>
           <div
-            className={`backdrop-blur-2xl relative shadow-[0_0_80px_rgba(0,0,0,0.9)] mx-auto border ${currentBorderColor} rounded-2xl h-[640px] flex flex-col overflow-hidden transition-colors duration-1000`}
+            className={`backdrop-blur-2xl relative shadow-[0_0_80px_rgba(0,0,0,0.9)] mx-auto border ${currentBorderColor} rounded-2xl ${isSecondPage ? 'h-[760px]' : 'h-[640px]'} flex flex-col overflow-hidden transition-colors duration-1000`}
             style={{ backgroundColor: currentCardColor }}
           >
 
@@ -440,8 +332,8 @@ You walking toward me.`
               <div className="p-10 flex-grow flex flex-col animate-fade-in">
                 <div className="text-center my-auto">
                   <Flame size={45} className="mx-auto mb-10 text-[#ffb05c] animate-pulse drop-shadow-[0_0_15px_rgba(255,176,92,0.6)]" />
-                  <h1 className="text-5xl text-[#fdfbf7] font-cursive mb-6 tracking-wide drop-shadow-md">The Little Things</h1>
-                  <p className="font-light text-[#dcb897] mb-12 px-6 text-[11px] tracking-[0.3em] uppercase leading-relaxed">A study of everything you are</p>
+                  <h1 className="text-5xl text-[#fdfbf7] font-cursive mb-6 tracking-wide drop-shadow-md">Carrying Light</h1>
+                  <p className="font-light text-[#dcb897] mb-12 px-6 text-[11px] tracking-[0.3em] uppercase leading-relaxed">Some things bloom for a lifetime</p>
                   <button onClick={nextPage} className="mx-auto flex items-center gap-3 border-2 border-[#ffb05c] px-8 py-3 text-[#ffb05c] text-[11px] font-bold uppercase tracking-[0.4em] rounded-full shadow-[0_0_20px_rgba(255,176,92,0.2)] hover:bg-[#ffb05c] hover:text-[#15100c] transition-all duration-300">Begin <ChevronRight size={16} /></button>
                 </div>
               </div>
@@ -455,7 +347,7 @@ You walking toward me.`
                   <button onClick={prevPage} className="px-4 py-1.5 border border-white/20 rounded-full text-[#dcb897] text-[9px] uppercase tracking-[0.2em] hover:bg-white/10 transition-all">Back</button>
                   <div className="flex flex-col items-center">
                     <span className="text-[#ffb05c] text-[11px] font-bold tracking-[0.2em] uppercase">{page} / {pages.length}</span>
-                    <span className="text-[8px] text-white/50 tracking-[0.2em] uppercase mt-1">{pages[page - 1].title}</span>
+                    <span className="text-[8px] text-white/50 tracking-[0.2em] uppercase mt-1">{pages[page - 1].subtitle}</span>
                   </div>
                   <button onClick={nextPage} className="px-5 py-1.5 border-2 border-[#ffb05c] rounded-full text-[#ffb05c] text-[9px] font-bold uppercase tracking-[0.2em] shadow-[0_0_15px_rgba(255,176,92,0.2)] hover:bg-[#ffb05c] hover:text-[#15100c] transition-all">
                     {page === pages.length ? "Finish" : "Next"}
@@ -468,9 +360,11 @@ You walking toward me.`
                     <div className="text-5xl mb-6 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] text-center">{pages[page - 1].icon}</div>
                     <h2 className="text-2xl font-bold tracking-widest text-[#fcdbb6] mb-2 text-center uppercase text-[12px] opacity-80">{pages[page - 1].title}</h2>
                     <div className="w-12 h-[1px] bg-[#d27d2d]/50 mb-8"></div>
-                    <p className="text-[21px] md:text-[23px] leading-[1.8] font-cursive text-[#fdfbf7] whitespace-pre-line tracking-wide drop-shadow-md text-center w-full">
-                      {pages[page - 1].content}
-                    </p>
+                    <div className={`w-full ${isPoemPage ? 'max-h-[360px] overflow-y-auto custom-scrollbar pr-2' : ''}`}>
+                      <p className={`text-[21px] md:text-[23px] leading-[1.8] font-cursive text-[#fdfbf7] whitespace-pre-line tracking-wide drop-shadow-md w-full ${pages[page - 1].align === 'left' ? 'text-left' : 'text-center'}`}>
+                        {pages[page - 1].content}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -481,8 +375,8 @@ You walking toward me.`
               <div className="p-10 flex-grow flex flex-col relative overflow-hidden animate-fade-in bg-[rgba(30,20,15,0.9)]">
                 <div className="text-center my-auto flex flex-col items-center z-10">
                   <Heart size={40} fill="#ffb05c" className="text-[#ffb05c] mb-8 animate-pulse drop-shadow-[0_0_20px_rgba(255,176,92,0.8)]" />
-                  <h2 className="text-4xl text-[#fdfbf7] font-cursive mb-6 tracking-wide drop-shadow-md">All of You. Always.</h2>
-                  <p className="text-[#dcb897] font-light text-[15px] leading-relaxed mb-10 px-6 tracking-wide italic">"I just want to build a world with you."</p>
+                  <h2 className="text-4xl text-[#fdfbf7] font-cursive mb-6 tracking-wide drop-shadow-md">My Vidhi. Just Mine.</h2>
+                  <p className="text-[#dcb897] font-light text-[15px] leading-relaxed mb-10 px-6 tracking-wide italic">"I will spend my life choosing you — again and again."</p>
                   <div className="w-24 h-[1px] bg-[#ffb05c]/40 mb-8"></div>
                   <p className="text-[#ffb05c] tracking-[0.6em] uppercase text-[10px] font-bold">Forever Yours</p>
                   <button onClick={() => { setPage(1); triggerEmberPulse(); }} className="mt-12 px-8 py-2.5 border border-[#ffb05c]/50 text-[#ffb05c] text-[9px] uppercase tracking-[0.4em] rounded-full hover:bg-white/10 transition-all">Read Again</button>
