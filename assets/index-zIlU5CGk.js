@@ -17,11 +17,11 @@ A certain bag is not empty.
 It carries secrets.`},{day:11,text:`11 days.
 Something delicate will rest against your skin.
 It chose you before you saw it.`},{day:10,text:`10 days.
-There’s a scent that reminded me of the way you look at me.
-I kept it.`},{day:9,text:`9 days.
+Your name is about to leave a mark — quietly, permanently.`},{day:9,text:`9 days.
 There is fabric involved.
 That’s all I’ll say.`},{day:8,text:`8 days.
-Your name is about to leave a mark — quietly, permanently.`},{day:7,text:`7 days.
+There’s a scent that reminded me of the way you look at me.
+I kept it.`},{day:7,text:`7 days.
 There is something structured, ivory, and radiant.
 It’s not the moon.`},{day:6,text:`6 days.
 A book will soon recognize its owner properly.`},{day:5,text:`5 days.
