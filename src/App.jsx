@@ -1,130 +1,161 @@
 import React, { useState, useEffect } from 'react';
-import { Heart, Moon, Star, BookOpen, ShieldCheck, Flower } from 'lucide-react';
+import { Sun, Heart, Sparkles, ArrowRight } from 'lucide-react';
 
-const SanctuaryForVidhi = () => {
-  const [now, setNow] = useState(new Date());
-  const [activeTab, setActiveTab] = useState('reassurance');
-  const [viewingNote, setViewingNote] = useState(null);
+const GudiPadwaExperience = () => {
+  const [page, setPage] = useState(1);
+  const [blooms, setBlooms] = useState([]);
 
-  useEffect(() => {
-    const timer = setInterval(() => setNow(new Date()), 60000); // Only needs to update slowly now
-    return () => clearInterval(timer);
-  }, []);
+  // --- Calculate Days Together ---
+  const startDate = new Date('2025-11-07');
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const diffTime = Math.abs(tomorrow - startDate);
+  const daysTogether = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-  // Rotating Daily Messages Logic
-  const dailyWisdom = [
-    "Love is patient enough to wait.",
-    "The story pauses, but the feeling does not.",
-    "Some reunions become sweeter because we waited.",
-    "A temporary distance is nothing to a lifetime love.",
-    "The most beautiful flowers grow through the quietest winters.",
-    "We are building a foundation that no circumstance can shake."
-  ];
+  // --- Sunflower Interaction Logic ---
+  const handleTouch = (e) => {
+    if (page !== 2) return;
+    const x = e.clientX || (e.touches && e.touches[0].clientX);
+    const y = e.clientY || (e.touches && e.touches[0].clientY);
 
-  const dailyMessage = dailyWisdom[new Date().getDay() % dailyWisdom.length];
+    const newBloom = { id: Date.now(), x, y };
+    setBlooms((prev) => [...prev, newBloom]);
 
-  const hiddenReminders = [
-    { title: "A Note on Patience", content: "I am not in a rush to get to a destination, because I am already home in you. Whether we meet today or months from now, my heart is already settled." },
-    { title: "The Quiet Strength", content: "I see the way you are showing up for your mother and your family. That strength is one of the many reasons I love you. Take all the time you need." },
-    { title: "A Promise", content: "The plans may have moved on the map, but they haven't moved in my mind. We will have our morning coffee and our soft light. It is a matter of 'when', never 'if'." }
-  ];
+    // Remove bloom after animation
+    setTimeout(() => {
+      setBlooms((prev) => prev.filter(b => b.id !== newBloom.id));
+    }, 2000);
+  };
 
   return (
-    <div className="min-h-screen w-full bg-[#1c1616] text-[#e5d5d5] font-serif relative overflow-hidden flex flex-col items-center px-6">
-      {/* Soft Background Ambiance */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#2d1e1e_0%,_#1c1616_100%)]"></div>
-      <div className="absolute inset-0 opacity-20 paper-texture pointer-events-none"></div>
+    <div
+      className="min-h-screen w-full bg-[#fcd12a] relative overflow-hidden font-serif select-none"
+      onMouseDown={handleTouch}
+      onTouchStart={handleTouch}
+    >
+      {/* GLOBAL BACKGROUND ELEMENTS */}
+      <div className="absolute inset-0 opacity-10 paper-texture pointer-events-none"></div>
 
-      {/* Floating Soft Glows */}
-      <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-[#8b0000] blur-[120px] opacity-10 animate-pulse"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-[#d4af37] blur-[120px] opacity-5 animate-pulse"></div>
+      {/* Shimmer Particles */}
+      <div className="absolute inset-0 pointer-events-none">
+        {[...Array(15)].map((_, i) => (
+          <div key={i} className="shimmer-dot" style={{
+            left: Math.random() * 100 + '%',
+            top: Math.random() * 100 + '%',
+            animationDelay: Math.random() * 5 + 's'
+          }}></div>
+        ))}
+      </div>
 
-      {/* Header Section */}
-      <header className="z-10 mt-20 mb-16 text-center max-w-2xl animate-fade-in">
-        <h2 className="text-[#d4af37] tracking-[0.4em] uppercase text-[10px] mb-6 opacity-60">Patience & Presence</h2>
-        <h1 className="text-3xl md:text-4xl font-cursive text-[#f5e6e6] mb-8 leading-relaxed">
-          Not a Goodbye to the Countdown — Just a Pause.
-        </h1>
-        <div className="w-16 h-[1px] bg-[#d4af37]/30 mx-auto"></div>
-      </header>
+      {/* PAGE 1: THE LETTER */}
+      {page === 1 && (
+        <div className="relative z-10 flex items-center justify-center p-6 min-h-screen animate-fade-in">
+          <div className="max-w-xl w-full bg-[#fffcf0] border-[16px] border-[#004d4d] p-8 md:p-12 shadow-2xl relative">
+            <div className="absolute top-0 left-0 w-full h-2 bg-[#800020]"></div>
 
-      {/* Main Content Area */}
-      <main className="z-10 w-full max-w-2xl space-y-12 pb-32">
+            <header className="text-center mb-8">
+              <Sun className="mx-auto text-[#d4af37] mb-2 animate-spin-slow" size={40} />
+              <p className="text-[10px] uppercase tracking-[0.4em] text-[#004d4d] font-bold">
+                {daysTogether} Days of Us
+              </p>
+            </header>
 
-        {/* Reassurance Message */}
-        <section className="bg-white/5 border border-white/10 p-8 rounded-sm backdrop-blur-sm animate-fade-in-up">
-          <p className="text-[17px] leading-relaxed italic text-[#cec0c0]">
-            "Sometimes life asks us to stand beside family first. It asks us to be the ground for those we love when their world feels shaky. Our time together will come when the hearts are lighter and the skies are clearer. Until then, I am right here—steady, certain, and holding you from across the miles."
-          </p>
-        </section>
+            <div className="space-y-5 text-[#3a2e2e] leading-relaxed text-center">
+              <h1 className="text-4xl font-cursive text-[#800020]">My Vidhi,</h1>
+              <p className="italic">Our first Gudi Padwa together… even from a distance, it feels special because it’s ours.</p>
+              <p>You walked into my life like sunlight — gently, but completely. Since then, everything has felt warmer and more certain.</p>
+              <p>You are my sunflower — always finding light. I will always be there, making sure you never have to search for that light alone.</p>
+              <p className="font-bold text-[#004d4d]">We are building something that lasts.</p>
+              <p>Next year, we celebrate in our home, with sunlight pouring in and you exactly where you belong.</p>
 
-        {/* When the Time is Right (Rotating Wisdom) */}
-        <section className="text-center py-10">
-          <Moon size={24} className="mx-auto mb-6 text-[#d4af37] opacity-40" />
-          <h3 className="text-[11px] uppercase tracking-[0.3em] text-[#d4af37] mb-4">When the Time is Right</h3>
-          <p className="text-2xl md:text-3xl font-cursive text-[#f5e6e6] transition-all duration-1000">
-            {dailyMessage}
-          </p>
-        </section>
-
-        {/* For Vidhi Section */}
-        <section className="space-y-6">
-          <div className="flex items-center gap-4">
-            <Flower size={18} className="text-[#d4af37] opacity-60" />
-            <h3 className="text-xl font-light tracking-widest text-[#f5e6e6]">For Vidhi</h3>
+              <footer className="pt-8">
+                <button
+                  onClick={() => setPage(2)}
+                  className="flex items-center gap-2 mx-auto px-6 py-2 bg-[#800020] text-white rounded-full text-xs tracking-widest uppercase hover:bg-[#004d4d] transition-colors"
+                >
+                  Turn the Page <ArrowRight size={14} />
+                </button>
+              </footer>
+            </div>
           </div>
-          <div className="h-[1px] w-full bg-gradient-to-r from-[#d4af37]/40 to-transparent"></div>
-          <p className="text-[16px] leading-relaxed text-[#cec0c0]">
-            My heart is with you and your mother during this difficult time. There is no weight you carry that I am not willing to share. I admire the way you are honoring your grandfather’s memory and the love you have for your family. Focus on healing and being present for them. I am the safety net that will never let you fall.
-          </p>
-        </section>
+        </div>
+      )}
 
-        {/* Hidden Reminders (Small Gifts) */}
-        <section className="pt-10">
-          <h3 className="text-[10px] uppercase tracking-[0.4em] text-[#d4af37] mb-8 text-center opacity-60">Small Reminders</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {hiddenReminders.map((note, i) => (
-              <button
-                key={i}
-                onClick={() => setViewingNote(viewingNote === i ? null : i)}
-                className={`p-6 border rounded-sm transition-all duration-500 text-left ${viewingNote === i ? 'bg-[#2d1e1e] border-[#d4af37]' : 'bg-transparent border-white/10 hover:border-white/30'}`}
-              >
-                <BookOpen size={16} className="mb-4 text-[#d4af37]" />
-                <span className="text-[12px] uppercase tracking-widest block mb-2">{note.title}</span>
-                {viewingNote === i && (
-                  <p className="text-sm font-cursive text-[#cec0c0] mt-4 leading-relaxed animate-fade-in">
-                    {note.content}
-                  </p>
-                )}
-              </button>
-            ))}
+      {/* PAGE 2: THE QUESTION */}
+      {page === 2 && (
+        <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-6 text-center animate-fade-in">
+          <div className="max-w-lg space-y-8">
+            <div className="space-y-2">
+              <div className="w-20 h-1 bg-[#800020] mx-auto mb-4"></div>
+              <h2 className="text-4xl md:text-6xl font-cursive text-[#800020] leading-tight drop-shadow-sm">
+                Will you be the <span className="text-[#ffffff] underline decoration-[#004d4d]">Shrikhand</span> to my <span className="text-[#004d4d]">Puri</span> this Padwa?
+              </h2>
+              <div className="w-20 h-1 bg-[#800020] mx-auto mt-4"></div>
+            </div>
+
+            <div className="space-y-4 pt-10">
+              <p className="text-[11px] uppercase tracking-[0.5em] text-[#004d4d] font-bold">A promise kept</p>
+              <p className="text-3xl font-cursive text-[#800020] animate-pulse">I'm coming soon.</p>
+            </div>
+
+            <p className="text-[10px] text-[#004d4d]/60 mt-20 italic">Touch the screen to let our love bloom...</p>
           </div>
-        </section>
 
-        {/* Closing Line */}
-        <footer className="pt-20 pb-10 text-center animate-fade-in">
-          <Heart size={20} className="mx-auto mb-6 text-[#8b0000] opacity-60" />
-          <p className="text-xl font-cursive text-[#f5e6e6] leading-relaxed">
-            “The calendar changed.<br />
-            My love for you did not.”
-          </p>
-        </footer>
-      </main>
+          {/* Render Active Blooms */}
+          {blooms.map(bloom => (
+            <div
+              key={bloom.id}
+              className="absolute pointer-events-none animate-sunflower-bloom"
+              style={{ left: bloom.x - 25, top: bloom.y - 25 }}
+            >
+              <Sun size={50} fill="#fcd12a" className="text-[#d4af37]" />
+            </div>
+          ))}
+        </div>
+      )}
 
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
         .font-cursive { font-family: 'Caveat', cursive; }
         .font-serif { font-family: 'Playfair Display', serif; }
-        .paper-texture {
-          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)' opacity='0.1'/%3E%3C/svg%3E");
+
+        .shimmer-dot {
+          position: absolute;
+          width: 3px;
+          height: 3px;
+          background: white;
+          border-radius: 50%;
+          box-shadow: 0 0 10px #fff, 0 0 20px #d4af37;
+          animation: shimmer-float 4s infinite ease-in-out;
         }
-        .animate-fade-in { animation: fadeIn 2s ease-out forwards; }
-        .animate-fade-in-up { animation: fadeInUp 1.5s ease-out forwards; }
+
+        @keyframes shimmer-float {
+          0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
+          50% { transform: translateY(-20px) scale(1.5); opacity: 0.8; }
+        }
+
+        .animate-sunflower-bloom {
+          animation: bloom-out 2s ease-out forwards;
+        }
+
+        @keyframes bloom-out {
+          0% { transform: scale(0) rotate(0deg); opacity: 0; }
+          30% { transform: scale(1.2) rotate(45deg); opacity: 1; }
+          100% { transform: scale(1.5) rotate(90deg); opacity: 0; }
+        }
+
+        .animate-fade-in { animation: fadeIn 1.2s ease-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .animate-spin-slow { animation: spin 10s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .paper-texture {
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' opacity='0.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+        }
       `}</style>
     </div>
   );
 };
 
-export default SanctuaryForVidhi;
+export default GudiPadwaExperience;
