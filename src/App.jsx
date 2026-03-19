@@ -1,161 +1,706 @@
-import React, { useState, useEffect } from 'react';
-import { Sun, Heart, Sparkles, ArrowRight } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  ArrowRight,
+  Cake,
+  Coffee,
+  Download,
+  Heart,
+  Lock,
+  Moon,
+  Send,
+  Sparkles,
+  Sun,
+  Unlock,
+  Utensils,
+  X,
+} from 'lucide-react';
+import './App.css';
 
-const GudiPadwaExperience = () => {
-  const [page, setPage] = useState(1);
-  const [blooms, setBlooms] = useState([]);
+const IS_TEST_MODE = false;
+const INDIA_TIMEZONE = 'Asia/Kolkata';
+const STORAGE_KEY = 'royal-dispatch-answers';
+const BIRTHDAY_KEY = '2026-04-02';
+const FINAL_KEY = '2026-04-03';
 
-  // --- Calculate Days Together ---
-  const startDate = new Date('2025-11-07');
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const diffTime = Math.abs(tomorrow - startDate);
-  const daysTogether = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+const favoriteThings = [
+  'Trekking',
+  'Hiking',
+  'Nature',
+  'Archaeologist',
+  'Book Nook',
+  'Vintage Stamps',
+  'Cute Stickers',
+  'Peach Ice Tea',
+  'Sushi',
+  'Truffle Pasta',
+  'Kheema Pav',
+  'Mom\'s Medu Wada Sambar',
+  'Sabudana Vada',
+  'Kolambi Fry',
+  'Strawberry Cheesecake',
+  'Tiramisu',
+  'Biscoff',
+  'Salted Caramel',
+  'Vanilla Ice Cream',
+  'Roasted Almond',
+  'Sunny Side Eggs',
+  'Avocado Toast + Chilli',
+  'Cornflakes + Cold Milk',
+  'Cosmo',
+  'Long Island',
+  'Whiskey + Warm Water',
+  'Sex on the Beach',
+  'Strawberry Body Butter',
+  'Candles',
+  'Skincare',
+  'Plum Face Wash',
+  'Soft Days',
+  'Comfort',
+  'Warmth',
+  'Party Monster (slowed)',
+  'Die With A Smile',
+  'Maula Maula',
+  'KK',
+  'HER',
+  'Anime',
+  'One Piece',
+  'Naruto',
+  'Studio Ghibli',
+  'Onsen',
+  'Japan',
+  'Don Quijote',
+];
 
-  // --- Sunflower Interaction Logic ---
-  const handleTouch = (e) => {
-    if (page !== 2) return;
-    const x = e.clientX || (e.touches && e.touches[0].clientX);
-    const y = e.clientY || (e.touches && e.touches[0].clientY);
+const timeline = [
+  { hr: 0, icon: <Moon size={18} />, q: "What's one thing you're secretly wishing for this year?", msg: "Happy Birthday, my favourite person.\nDifferent places, same moment, and somehow, you still feel right next to me." },
+  { hr: 1, icon: <Moon size={18} />, q: 'If I was there right now, what would we be doing?', msg: "If I could be anywhere right now, it wouldn't be a place. It would just be next to you." },
+  { hr: 2, icon: <Moon size={18} />, q: "What's something that instantly calms you?", msg: "You don't even realise how much peace you bring into my life." },
+  { hr: 3, icon: <Moon size={18} />, q: 'When did you first feel comfortable with me?', msg: 'My favourite thing about you is how effortlessly you became important to me.' },
+  { hr: 4, icon: <Moon size={18} />, q: 'Do you believe two people can feel close even in silence?', msg: 'Because with you, even silence feels like connection.' },
+  { hr: 5, icon: <Moon size={18} />, q: 'One word to describe us?', msg: "You're not just someone I like. You're someone I choose." },
+  { hr: 6, icon: <Sun size={18} />, q: "What's the first thing you're doing after waking up?", msg: 'Good morning, birthday girl.\nSame sun, different skies, still ours.' },
+  { hr: 7, icon: <Coffee size={18} />, q: 'Be honest, am I cute annoying or just annoying?', msg: "If I was there, I'd already be annoying you, but in the way that makes you smile." },
+  { hr: 8, icon: <Sun size={18} />, q: 'What outfit are you wearing today?', msg: "You look your best when you're just being you. No effort needed." },
+  { hr: 9, icon: <Sun size={18} />, q: "What's one small thing you love about yourself?", msg: 'I notice the small things about you, and I like all of them.' },
+  { hr: 10, icon: <Sun size={18} />, q: 'Do you feel special today?', msg: "You're not just special today. Today just finally caught up." },
+  { hr: 11, icon: <Sun size={18} />, q: "How's your day feeling so far?", msg: 'I hope today feels soft, easy, and a little magical for you.' },
+  { hr: 12, icon: <Utensils size={18} />, q: 'Are you hungry or just pretending to be productive?', msg: "Lunch is on me today, but soon, we're sharing a table instead of distance." },
+  { hr: 13, icon: <Sun size={18} />, q: "What's something that reminded you of me recently?", msg: "You've become part of my routine without even trying." },
+  { hr: 14, icon: <Heart size={18} />, q: 'Say it honestly, do you miss me sometimes?', msg: "I don't say this a lot, but I really, really like you." },
+  { hr: 15, icon: <Sun size={18} />, q: 'Where should we go when we finally meet?', msg: 'Every time I imagine us meeting, it just feels right.' },
+  { hr: 16, icon: <Sun size={18} />, q: "What's your perfect kind of chill evening?", msg: 'You make even ordinary days feel like something to look forward to.' },
+  { hr: 17, icon: <Heart size={18} />, q: 'Send me a selfie?', msg: 'I knew it. You look really good today.' },
+  { hr: 18, icon: <Sun size={18} />, q: 'Are you a sunset person or night person?', msg: 'Moments like this are meant to be shared. Remember that.' },
+  { hr: 19, icon: <Moon size={18} />, q: 'Would you pick a ride or a long walk with me?', msg: "If I was there, we'd probably do both and not want it to end." },
+  { hr: 20, icon: <Cake size={18} />, q: "What dessert are you craving right now?", msg: "Save some for me, or don't, I'll still steal a bite when I'm there." },
+  { hr: 21, icon: <Heart size={18} />, q: "What's one thing you've started liking about me?", msg: "You're slowly becoming my favourite habit." },
+  { hr: 22, icon: <Moon size={18} />, q: "Do you think we're a good story?", msg: "I don't know where this goes, but I know I want to keep going." },
+  { hr: 23, icon: <Moon size={18} />, q: 'Did today feel a little different?', msg: "Next birthday, I'm not missing it. That's a promise." },
+];
 
-    const newBloom = { id: Date.now(), x, y };
-    setBlooms((prev) => [...prev, newBloom]);
+function getIndiaTimeParts(date) {
+  const formatter = new Intl.DateTimeFormat('en-CA', {
+    timeZone: INDIA_TIMEZONE,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hourCycle: 'h23',
+  });
 
-    // Remove bloom after animation
-    setTimeout(() => {
-      setBlooms((prev) => prev.filter(b => b.id !== newBloom.id));
-    }, 2000);
+  const parts = Object.fromEntries(
+    formatter
+      .formatToParts(date)
+      .filter((part) => part.type !== 'literal')
+      .map((part) => [part.type, part.value]),
+  );
+
+  return {
+    dayKey: `${parts.year}-${parts.month}-${parts.day}`,
+    hour: Number(parts.hour),
+    minute: Number(parts.minute),
+    second: Number(parts.second),
+  };
+}
+
+function formatCountdown(ms) {
+  if (ms <= 0) {
+    return { d: 0, h: 0, m: 0, s: 0 };
+  }
+
+  return {
+    d: Math.floor(ms / (1000 * 60 * 60 * 24)),
+    h: Math.floor((ms / (1000 * 60 * 60)) % 24),
+    m: Math.floor((ms / (1000 * 60)) % 60),
+    s: Math.floor((ms / 1000) % 60),
+  };
+}
+
+function getAppPhase(dayKey) {
+  if (dayKey < BIRTHDAY_KEY) return 'pre_birthday';
+  if (dayKey >= FINAL_KEY) return 'final';
+  return 'birthday';
+}
+
+function createAnswerExport(answersMap) {
+  const answeredHours = Object.keys(answersMap)
+    .map(Number)
+    .sort((a, b) => a - b);
+
+  const body =
+    answeredHours.length === 0
+      ? 'No answers were saved.'
+      : answeredHours
+        .map((hour) => {
+          const item = timeline.find((entry) => entry.hr === hour);
+          return [`${String(hour).padStart(2, '0')}:00`, `Question: ${item?.q ?? 'Unknown'}`, `Answer: ${answersMap[hour]}`].join('\n');
+        })
+        .join('\n\n');
+
+  return `Royal Dispatch Answers\nTimezone: ${INDIA_TIMEZONE}\nDate: ${BIRTHDAY_KEY}\n\n${body}\n`;
+}
+
+function CountdownCard({ countdown }) {
+  const units = [
+    ['Days', countdown.d],
+    ['Hours', countdown.h],
+    ['Minutes', countdown.m],
+    ['Seconds', countdown.s],
+  ];
+
+  return (
+    <div className="rounded-[28px] border border-white/15 bg-black/25 px-6 py-5 backdrop-blur-xl shadow-[0_20px_80px_rgba(0,0,0,0.35)]">
+      <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.45em] text-[#f8d7a7]">Birthday Dashboard</p>
+      <div className="grid grid-cols-4 gap-3 text-center text-white">
+        {units.map(([label, value]) => (
+          <div key={label} className="rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-4">
+            <div className="text-2xl font-semibold tabular-nums md:text-3xl">{value}</div>
+            <div className="mt-1 text-[9px] uppercase tracking-[0.28em] text-white/55">{label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [realTime, setRealTime] = useState(() => new Date());
+  const [testStage, setTestStage] = useState('wormhole');
+  const [testHour, setTestHour] = useState(0);
+  const [stage, setStage] = useState('wormhole');
+  const [answers, setAnswers] = useState(() => {
+    try {
+      const stored = window.localStorage.getItem(STORAGE_KEY);
+      return stored ? JSON.parse(stored) : {};
+    } catch {
+      return {};
+    }
+  });
+  const [input, setInput] = useState('');
+  const [activeHour, setActiveHour] = useState(null);
+  const [showMessage, setShowMessage] = useState(false);
+  const [countdown, setCountdown] = useState(() => formatCountdown(0));
+
+  const itemsRef = useRef([]);
+  const requestRef = useRef();
+
+  const indiaTime = getIndiaTimeParts(realTime);
+  const appPhase = IS_TEST_MODE ? 'birthday' : getAppPhase(indiaTime.dayKey);
+  const currentHour = IS_TEST_MODE ? testHour : indiaTime.hour;
+  const currentStage = IS_TEST_MODE
+    ? testStage
+    : appPhase === 'final'
+      ? 'final'
+      : stage;
+  const activeItem = activeHour === null ? null : timeline.find((item) => item.hr === activeHour);
+  const answeredCount = Object.keys(answers).length;
+  const exportReady = IS_TEST_MODE || appPhase === 'final';
+
+  useEffect(() => {
+    const birthdayStart = new Date('2026-04-01T18:30:00.000Z').getTime();
+    const timer = window.setInterval(() => {
+      const now = new Date();
+      setRealTime(now);
+      setCountdown(formatCountdown(birthdayStart - now.getTime()));
+    }, 1000);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(answers));
+    } catch {
+      // Ignore storage failures and keep the in-memory answers.
+    }
+  }, [answers]);
+
+  useEffect(() => {
+    if (!IS_TEST_MODE && appPhase === 'final' && currentStage !== 'final') {
+      setStage('wormhole');
+      setActiveHour(null);
+      setShowMessage(false);
+    }
+  }, [appPhase, currentStage]);
+
+  useEffect(() => {
+    if (currentStage !== 'wormhole') {
+      if (requestRef.current) cancelAnimationFrame(requestRef.current);
+      return undefined;
+    }
+
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const centerX = width / 2;
+    const centerY = height / 2;
+
+    const createBody = (id, text) => ({
+      id,
+      text,
+      x: width * 0.18 + Math.random() * width * 0.64,
+      y: -80 - Math.random() * height * 0.6,
+      vx: (Math.random() - 0.5) * 0.18,
+      vy: 0.55 + Math.random() * 0.35,
+      radius: 38,
+    });
+
+    const bodies = favoriteThings.slice(0, 15).map((text, id) => createBody(id, text));
+
+    const updatePhysics = () => {
+      bodies.forEach((body) => {
+        body.x += body.vx;
+        body.y += body.vy;
+
+        const dxCenter = centerX - body.x;
+        const dyCenter = centerY - body.y;
+        const distCenter = Math.max(Math.sqrt(dxCenter * dxCenter + dyCenter * dyCenter), 1);
+
+        body.vx += (dxCenter / distCenter) * 0.003;
+        body.vy += (dyCenter / distCenter) * 0.003;
+
+        if (body.x < width * 0.08) body.vx += 0.015;
+        if (body.x > width * 0.92) body.vx -= 0.015;
+
+        bodies.forEach((other) => {
+          if (body.id === other.id) return;
+
+          const dx = body.x - other.x;
+          const dy = body.y - other.y;
+          const distance = Math.max(Math.sqrt(dx * dx + dy * dy), 1);
+          const minDistance = body.radius + other.radius;
+
+          if (distance < minDistance) {
+            const force = (minDistance - distance) * 0.001;
+            body.vx += (dx / distance) * force;
+            body.vy += (dy / distance) * force;
+          }
+        });
+
+        const speed = Math.sqrt(body.vx * body.vx + body.vy * body.vy);
+        if (speed > 1) {
+          body.vx *= 0.95;
+          body.vy *= 0.95;
+        }
+
+        let scale = 1;
+        let opacity = 1;
+
+        if (distCenter < 110) {
+          scale = distCenter / 110;
+          opacity = distCenter / 110;
+
+          if (distCenter < 24) {
+            Object.assign(body, createBody(body.id, body.text));
+          }
+        }
+
+        if (body.y > height + 120) {
+          Object.assign(body, createBody(body.id, body.text));
+        }
+
+        const element = itemsRef.current[body.id];
+        if (element) {
+          element.style.transform = `translate(${body.x}px, ${body.y}px) scale(${scale})`;
+          element.style.opacity = String(opacity);
+        }
+      });
+
+      requestRef.current = requestAnimationFrame(updatePhysics);
+    };
+
+    requestRef.current = requestAnimationFrame(updatePhysics);
+    return () => cancelAnimationFrame(requestRef.current);
+  }, [currentStage]);
+
+  const handleStartJourney = () => {
+    if (IS_TEST_MODE) {
+      setTestStage('grid');
+      return;
+    }
+
+    if (appPhase !== 'birthday') return;
+    setStage('grid');
+  };
+
+  const handleHourUnlock = (hour) => {
+    if (!IS_TEST_MODE && appPhase !== 'birthday') {
+      window.alert('The archive only opens on April 2 in India.');
+      return;
+    }
+
+    if (currentHour < hour) {
+      window.alert(`Not yet. This box opens at ${String(hour).padStart(2, '0')}:00 IST.`);
+      return;
+    }
+
+    const previousAnswer = answers[hour] ?? '';
+    setActiveHour(hour);
+    setInput(previousAnswer);
+    setShowMessage(Boolean(previousAnswer));
+  };
+
+  const closePortal = () => {
+    setActiveHour(null);
+    setInput('');
+    setShowMessage(false);
+  };
+
+  const submitAnswer = () => {
+    if (!activeItem) return;
+
+    const trimmed = input.trim();
+    if (trimmed.length < 2) return;
+
+    setAnswers((prev) => ({ ...prev, [activeItem.hr]: trimmed }));
+    setShowMessage(true);
+  };
+
+  const exportAnswers = () => {
+    const exportText = createAnswerExport(answers);
+    const blob = new Blob([exportText], { type: 'text/plain;charset=utf-8' });
+    const url = window.URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = 'royal-dispatch-answers.txt';
+    anchor.click();
+    window.URL.revokeObjectURL(url);
   };
 
   return (
-    <div
-      className="min-h-screen w-full bg-[#fcd12a] relative overflow-hidden font-serif select-none"
-      onMouseDown={handleTouch}
-      onTouchStart={handleTouch}
-    >
-      {/* GLOBAL BACKGROUND ELEMENTS */}
-      <div className="absolute inset-0 opacity-10 paper-texture pointer-events-none"></div>
+    <div className="min-h-screen w-full overflow-hidden bg-[#05070b] text-white">
+      {currentStage === 'wormhole' && (
+        <section className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(212,144,72,0.14),_transparent_35%),linear-gradient(180deg,_#23140f_0%,_#0d1117_45%,_#06080d_100%)] px-6 py-10">
+          <div className="paper-texture absolute inset-0 opacity-25" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(221,153,81,0.18),_transparent_18%)]" />
 
-      {/* Shimmer Particles */}
-      <div className="absolute inset-0 pointer-events-none">
-        {[...Array(15)].map((_, i) => (
-          <div key={i} className="shimmer-dot" style={{
-            left: Math.random() * 100 + '%',
-            top: Math.random() * 100 + '%',
-            animationDelay: Math.random() * 5 + 's'
-          }}></div>
-        ))}
-      </div>
+          <div className="pointer-events-none absolute inset-0">
+            {favoriteThings.slice(0, 15).map((thing, index) => (
+              <div
+                key={thing}
+                ref={(element) => {
+                  itemsRef.current[index] = element;
+                }}
+                className="absolute left-0 top-0 rounded-full border border-white/10 bg-white/8 px-4 py-2 text-[11px] uppercase tracking-[0.26em] text-[#f3d9b2] backdrop-blur-md"
+                style={{ transform: 'translate(-120px, -120px)' }}
+              >
+                {thing}
+              </div>
+            ))}
+          </div>
 
-      {/* PAGE 1: THE LETTER */}
-      {page === 1 && (
-        <div className="relative z-10 flex items-center justify-center p-6 min-h-screen animate-fade-in">
-          <div className="max-w-xl w-full bg-[#fffcf0] border-[16px] border-[#004d4d] p-8 md:p-12 shadow-2xl relative">
-            <div className="absolute top-0 left-0 w-full h-2 bg-[#800020]"></div>
+          <div className="relative z-10 mx-auto flex min-h-[calc(100vh-5rem)] max-w-6xl flex-col items-center justify-between gap-12">
+            <div className="flex w-full items-start justify-between text-[10px] uppercase tracking-[0.4em] text-white/55">
+              <span>Royal Dispatch</span>
+              <span>{IS_TEST_MODE ? 'Test Mode' : `India time ${String(indiaTime.hour).padStart(2, '0')}:${String(indiaTime.minute).padStart(2, '0')}`}</span>
+            </div>
 
-            <header className="text-center mb-8">
-              <Sun className="mx-auto text-[#d4af37] mb-2 animate-spin-slow" size={40} />
-              <p className="text-[10px] uppercase tracking-[0.4em] text-[#004d4d] font-bold">
-                {daysTogether} Days of Us
-              </p>
-            </header>
+            <div className="relative flex flex-col items-center text-center">
+              <div className="absolute top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-[#f1ab58]/25 blur-[120px]" />
+              <div className="absolute top-1/2 h-44 w-44 -translate-y-1/2 rounded-full border border-[#f1c68a]/20" />
+            </div>
 
-            <div className="space-y-5 text-[#3a2e2e] leading-relaxed text-center">
-              <h1 className="text-4xl font-cursive text-[#800020]">My Vidhi,</h1>
-              <p className="italic">Our first Gudi Padwa together… even from a distance, it feels special because it’s ours.</p>
-              <p>You walked into my life like sunlight — gently, but completely. Since then, everything has felt warmer and more certain.</p>
-              <p>You are my sunflower — always finding light. I will always be there, making sure you never have to search for that light alone.</p>
-              <p className="font-bold text-[#004d4d]">We are building something that lasts.</p>
-              <p>Next year, we celebrate in our home, with sunlight pouring in and you exactly where you belong.</p>
-
-              <footer className="pt-8">
+            <div className="grid w-full max-w-5xl gap-6 md:grid-cols-[1.4fr_1fr]">
+              <div />
+              <div className="flex flex-col gap-6">
+                <CountdownCard countdown={countdown} />
                 <button
-                  onClick={() => setPage(2)}
-                  className="flex items-center gap-2 mx-auto px-6 py-2 bg-[#800020] text-white rounded-full text-xs tracking-widest uppercase hover:bg-[#004d4d] transition-colors"
+                  type="button"
+                  onClick={handleStartJourney}
+                  disabled={!IS_TEST_MODE && appPhase !== 'birthday'}
+                  className={`group flex items-center justify-center gap-3 rounded-full border px-6 py-4 text-[11px] font-semibold uppercase tracking-[0.45em] transition-all ${!IS_TEST_MODE && appPhase !== 'birthday'
+                    ? 'cursor-not-allowed border-white/10 bg-white/[0.04] text-white/35'
+                    : 'border-[#f3bf79] bg-[#f3bf79]/8 text-[#fff1dd] hover:bg-[#f3bf79] hover:text-[#2a1405]'
+                    }`}
                 >
-                  Turn the Page <ArrowRight size={14} />
+                  Start Journey
+                  <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
                 </button>
-              </footer>
+              </div>
             </div>
           </div>
-        </div>
+        </section>
       )}
 
-      {/* PAGE 2: THE QUESTION */}
-      {page === 2 && (
-        <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-6 text-center animate-fade-in">
-          <div className="max-w-lg space-y-8">
-            <div className="space-y-2">
-              <div className="w-20 h-1 bg-[#800020] mx-auto mb-4"></div>
-              <h2 className="text-4xl md:text-6xl font-cursive text-[#800020] leading-tight drop-shadow-sm">
-                Will you be the <span className="text-[#ffffff] underline decoration-[#004d4d]">Shrikhand</span> to my <span className="text-[#004d4d]">Puri</span> this Padwa?
-              </h2>
-              <div className="w-20 h-1 bg-[#800020] mx-auto mt-4"></div>
-            </div>
+      {currentStage === 'grid' && (
+        <section className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(209,81,92,0.18),_transparent_20%),linear-gradient(180deg,_#101521_0%,_#090d14_52%,_#05070b_100%)] px-5 py-10 md:px-8">
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:32px_32px] opacity-25" />
+          <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-8">
+            <header className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.5em] text-[#f29ba8]">The Birthday Archives</p>
+                <h1 className="mt-3 text-4xl font-semibold tracking-tight text-white md:text-6xl">24 hours, 24 locked messages.</h1>
+                <p className="mt-4 max-w-2xl text-sm leading-7 text-white/70 md:text-base">
+                  The grid stays a clean 6 by 4 dashboard on desktop and collapses on mobile. Each tile becomes available only when the India clock reaches that hour.
+                </p>
+              </div>
 
-            <div className="space-y-4 pt-10">
-              <p className="text-[11px] uppercase tracking-[0.5em] text-[#004d4d] font-bold">A promise kept</p>
-              <p className="text-3xl font-cursive text-[#800020] animate-pulse">I'm coming soon.</p>
-            </div>
+              <div className="rounded-[28px] border border-white/10 bg-white/[0.04] px-5 py-4 backdrop-blur-xl">
+                <p className="text-[9px] uppercase tracking-[0.4em] text-white/45">Live status</p>
+                <div className="mt-3 flex items-end gap-5">
+                  <div>
+                    <div className="text-3xl font-semibold tabular-nums text-white">{String(currentHour).padStart(2, '0')}:00</div>
+                    <div className="text-[10px] uppercase tracking-[0.3em] text-white/45">India hour</div>
+                  </div>
+                  <div>
+                    <div className="text-3xl font-semibold text-[#ffbf9b]">{answeredCount}/24</div>
+                    <div className="text-[10px] uppercase tracking-[0.3em] text-white/45">Answered</div>
+                  </div>
+                </div>
+              </div>
+            </header>
 
-            <p className="text-[10px] text-[#004d4d]/60 mt-20 italic">Touch the screen to let our love bloom...</p>
+            <div className="grid gap-3 sm:grid-cols-4 lg:grid-cols-6">
+              {timeline.map((item) => {
+                const isReady = currentHour >= item.hr;
+                const isDone = Boolean(answers[item.hr]);
+
+                return (
+                  <button
+                    key={item.hr}
+                    type="button"
+                    onClick={() => handleHourUnlock(item.hr)}
+                    className={`group aspect-square rounded-[28px] border p-4 text-left transition-all duration-300 ${isDone
+                      ? 'border-[#ef8b96] bg-[linear-gradient(180deg,_rgba(239,139,150,0.24),_rgba(239,139,150,0.12))] shadow-[0_12px_40px_rgba(239,139,150,0.18)]'
+                      : isReady
+                        ? 'border-white/12 bg-white/[0.05] hover:-translate-y-1 hover:border-white/25 hover:bg-white/[0.08]'
+                        : 'border-white/8 bg-black/25 hover:border-[#f2a35e]/50'
+                      }`}
+                  >
+                    <div className="flex h-full flex-col justify-between">
+                      <div className="flex items-start justify-between">
+                        <span className="text-[10px] uppercase tracking-[0.35em] text-white/45">{String(item.hr).padStart(2, '0')}:00</span>
+                        <span className={`${isDone ? 'text-white' : isReady ? 'text-[#ffc18e]' : 'text-white/30'}`}>
+                          {isDone ? <Heart size={16} fill="currentColor" /> : isReady ? <Unlock size={16} /> : <Lock size={16} />}
+                        </span>
+                      </div>
+                      <div>
+                        <div className={`mb-3 ${isDone ? 'text-white' : isReady ? 'text-[#ffc18e]' : 'text-white/35'}`}>{item.icon}</div>
+                        <p className="text-sm leading-6 text-white/78">
+                          {isDone ? 'Saved and unlocked.' : isReady ? 'Open this hour now.' : 'Locked until its hour arrives.'}
+                        </p>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
-          {/* Render Active Blooms */}
-          {blooms.map(bloom => (
-            <div
-              key={bloom.id}
-              className="absolute pointer-events-none animate-sunflower-bloom"
-              style={{ left: bloom.x - 25, top: bloom.y - 25 }}
-            >
-              <Sun size={50} fill="#fcd12a" className="text-[#d4af37]" />
+          {activeItem && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#020305]/88 p-5 backdrop-blur-xl animate-fade-in">
+              <div className="relative w-full max-w-3xl overflow-hidden rounded-[36px] border border-white/10 bg-[linear-gradient(180deg,_rgba(19,24,36,0.98),_rgba(8,10,15,0.98))] shadow-[0_30px_120px_rgba(0,0,0,0.6)]">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(239,139,150,0.18),_transparent_30%)]" />
+                <button
+                  type="button"
+                  onClick={closePortal}
+                  className="absolute right-5 top-5 z-10 rounded-full border border-white/10 bg-white/[0.05] p-2 text-white/70 transition hover:bg-white/[0.12] hover:text-white"
+                >
+                  <X size={16} />
+                </button>
+
+                <div className="relative z-10 grid min-h-[560px] md:grid-cols-[0.92fr_1.08fr]">
+                  <div className="flex flex-col justify-between border-b border-white/10 p-8 md:border-b-0 md:border-r">
+                    <div>
+                      <p className="text-[10px] uppercase tracking-[0.45em] text-[#ef8b96]">Portal {String(activeItem.hr).padStart(2, '0')}:00</p>
+                      <div className="mt-6 inline-flex rounded-full border border-white/10 bg-white/[0.04] p-3 text-[#ffc18e]">{activeItem.icon}</div>
+                      <h2 className="mt-6 max-w-sm text-3xl font-semibold leading-tight text-white">{activeItem.q}</h2>
+                    </div>
+
+                    <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-5">
+                      <p className="text-[9px] uppercase tracking-[0.35em] text-white/45">Saved answer</p>
+                      <p className="mt-3 text-sm leading-6 text-white/72">{answers[activeItem.hr] || 'Nothing saved for this hour yet.'}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col justify-center p-8">
+                    {!showMessage ? (
+                      <div className="animate-fade-in-up">
+                        <p className="text-[10px] uppercase tracking-[0.45em] text-white/45">Her reply</p>
+                        <textarea
+                          value={input}
+                          onChange={(event) => setInput(event.target.value)}
+                          placeholder="Write here..."
+                          className="mt-5 h-56 w-full rounded-[28px] border border-white/10 bg-black/25 p-5 text-sm leading-7 text-white outline-none transition focus:border-[#ef8b96] focus:bg-black/35"
+                        />
+                        <button
+                          type="button"
+                          onClick={submitAnswer}
+                          className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-[#ef8b96] px-6 py-4 text-[11px] font-semibold uppercase tracking-[0.4em] text-[#2f0d14] transition hover:bg-[#f5a6af]"
+                        >
+                          Save and Reveal
+                          <Send size={14} />
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="animate-bloom text-center">
+                        <Sparkles className="mx-auto text-[#ef8b96]" size={24} />
+                        <p className="mt-6 text-[10px] uppercase tracking-[0.45em] text-[#ef8b96]">Unlocked message</p>
+                        <p className="mt-8 whitespace-pre-line text-2xl leading-relaxed text-white md:text-3xl">{activeItem.msg}</p>
+                        <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+                          <button
+                            type="button"
+                            onClick={() => setShowMessage(false)}
+                            className="rounded-full border border-white/12 px-5 py-3 text-[10px] font-semibold uppercase tracking-[0.35em] text-white/72 transition hover:border-white/30 hover:text-white"
+                          >
+                            Edit answer
+                          </button>
+                          <button
+                            type="button"
+                            onClick={closePortal}
+                            className="rounded-full border border-[#ef8b96]/35 bg-[#ef8b96]/10 px-5 py-3 text-[10px] font-semibold uppercase tracking-[0.35em] text-[#ffd8dd] transition hover:bg-[#ef8b96]/20"
+                          >
+                            Close portal
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
-          ))}
+          )}
+        </section>
+      )}
+
+      {currentStage === 'final' && (
+        <section className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(234,111,121,0.14),_transparent_24%),linear-gradient(180deg,_#160d0f_0%,_#090507_58%,_#040304_100%)] px-6 py-12">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.04),_transparent_50%)]" />
+          <div className="relative z-10 mx-auto max-w-3xl rounded-[40px] border border-white/10 bg-black/30 p-8 backdrop-blur-xl shadow-[0_30px_120px_rgba(0,0,0,0.5)] md:p-12">
+            <p className="text-center text-[10px] uppercase tracking-[0.6em] text-[#ef8b96]">After the final hour</p>
+            <h1 className="mt-6 text-center text-4xl font-semibold tracking-tight text-white md:text-6xl">Birthday from Yours.</h1>
+            <div className="mt-10 space-y-6 text-base leading-8 text-white/82 md:text-lg">
+              <p>On this day, I do not just celebrate your birthday. I celebrate the person you became.</p>
+              <p>Everything you lived through, every choice you made, every moment that shaped you. I may not have been there for those chapters, but I am proud of the woman they created.</p>
+              <p>And now I get to be part of your story. That is something I do not take lightly.</p>
+              <p>The way you opened up to me, little by little, trusting me, caring for me, letting me see you as you are, means more to me than I can explain.</p>
+              <p className="text-2xl font-medium leading-relaxed text-[#ffd3b6] md:text-3xl">It is not just love. It is something calmer, deeper, and more certain.</p>
+              <p>Having you in my life feels like a privilege. Building a life with you feels like something I genuinely want.</p>
+              <p>You being in this world, and with me, means everything.</p>
+            </div>
+
+            <div className="mt-12 border-t border-white/10 pt-8 text-center">
+              <button
+                type="button"
+                onClick={exportReady ? exportAnswers : undefined}
+                className={`inline-flex items-center gap-3 text-sm uppercase tracking-[0.45em] transition ${exportReady ? 'text-[#ef8b96] hover:text-[#ffd0d6]' : 'cursor-default text-white/28'
+                  }`}
+              >
+                Yours soon to be husband
+                {exportReady && <Download size={14} />}
+              </button>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {IS_TEST_MODE && (
+        <div className="fixed bottom-0 left-0 right-0 z-[100] flex flex-col items-center justify-between gap-4 border-t border-green-500/30 bg-black/90 p-4 font-mono text-xs text-green-400 md:flex-row">
+          <div className="flex items-center gap-4">
+            <span className="rounded border border-green-500/40 bg-green-900/40 px-2 py-1 font-bold">TEST MODE</span>
+            <div className="flex overflow-hidden rounded border border-green-500/30">
+              <button onClick={() => setTestStage('wormhole')} className={`px-3 py-1 ${testStage === 'wormhole' ? 'bg-green-600 text-black' : 'hover:bg-green-900/50'}`}>Wormhole</button>
+              <button onClick={() => setTestStage('grid')} className={`px-3 py-1 ${testStage === 'grid' ? 'bg-green-600 text-black' : 'hover:bg-green-900/50'}`}>Grid</button>
+              <button onClick={() => setTestStage('final')} className={`px-3 py-1 ${testStage === 'final' ? 'bg-green-600 text-black' : 'hover:bg-green-900/50'}`}>Final</button>
+            </div>
+          </div>
+
+          {testStage === 'grid' && (
+            <div className="flex items-center gap-3">
+              <span>Simulate hour: {testHour}:00</span>
+              <input
+                type="range"
+                min="0"
+                max="23"
+                value={testHour}
+                onChange={(event) => setTestHour(Number(event.target.value))}
+                className="w-40 accent-green-500"
+              />
+            </div>
+          )}
         </div>
       )}
 
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
-        .font-cursive { font-family: 'Caveat', cursive; }
-        .font-serif { font-family: 'Playfair Display', serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700&display=swap');
 
-        .shimmer-dot {
-          position: absolute;
-          width: 3px;
-          height: 3px;
-          background: white;
-          border-radius: 50%;
-          box-shadow: 0 0 10px #fff, 0 0 20px #d4af37;
-          animation: shimmer-float 4s infinite ease-in-out;
+        :root {
+          font-family: 'Manrope', sans-serif;
         }
 
-        @keyframes shimmer-float {
-          0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
-          50% { transform: translateY(-20px) scale(1.5); opacity: 0.8; }
+        h1, h2, h3 {
+          font-family: 'Instrument Serif', serif;
+          font-weight: 400;
         }
-
-        .animate-sunflower-bloom {
-          animation: bloom-out 2s ease-out forwards;
-        }
-
-        @keyframes bloom-out {
-          0% { transform: scale(0) rotate(0deg); opacity: 0; }
-          30% { transform: scale(1.2) rotate(45deg); opacity: 1; }
-          100% { transform: scale(1.5) rotate(90deg); opacity: 0; }
-        }
-
-        .animate-fade-in { animation: fadeIn 1.2s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        
-        .animate-spin-slow { animation: spin 10s linear infinite; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
         .paper-texture {
-          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' opacity='0.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.15'/%3E%3C/svg%3E");
+        }
+
+        .animate-fade-in {
+          animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        .animate-fade-in-up {
+          animation: fadeInUp 0.35s ease-out forwards;
+        }
+
+        .animate-bloom {
+          animation: bloom 0.45s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(18px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes bloom {
+          from {
+            opacity: 0;
+            transform: scale(0.97);
+            filter: blur(12px);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+            filter: blur(0);
+          }
         }
       `}</style>
     </div>
   );
-};
+}
 
-export default GudiPadwaExperience;
+export default App;
