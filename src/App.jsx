@@ -69,6 +69,7 @@ const favoriteThings = [
   'Onsen',
   'Japan',
   'Don Quijote',
+  'Kolambi shakha'
 ];
 
 const timeline = [
