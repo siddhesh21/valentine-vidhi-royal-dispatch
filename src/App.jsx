@@ -69,7 +69,8 @@ const favoriteThings = [
   'Onsen',
   'Japan',
   'Don Quijote',
-  'Kolambi shakha'
+  'Kolambi shakha',
+  'Muzigae Mansion: Icy glow Divine'
 ];
 
 const timeline = [
@@ -98,6 +99,25 @@ const timeline = [
   { hr: 22, icon: <Moon size={18} />, q: "Do you think we're a good story?", msg: "I don't know where this goes, but I know I want to keep going." },
   { hr: 23, icon: <Moon size={18} />, q: 'Did today feel a little different?', msg: "Next birthday, I'm not missing it. That's a promise." },
 ];
+
+const wormholeAuraRings = [
+  { size: 460, opacity: 0.2, duration: 20, delay: 0, colors: 'rgba(255,149,76,0.5), rgba(255,80,124,0.08), transparent' },
+  { size: 360, opacity: 0.24, duration: 15, delay: -5, colors: 'rgba(255,220,150,0.5), rgba(234,88,174,0.12), transparent' },
+  { size: 280, opacity: 0.35, duration: 10, delay: -2, colors: 'rgba(255,132,63,0.7), rgba(255,195,113,0.16), transparent' },
+];
+
+const pinkMolecules = Array.from({ length: 26 }, (_, index) => ({
+  id: index,
+  left: `${8 + ((index * 17) % 82)}%`,
+  top: `${6 + ((index * 29) % 80)}%`,
+  size: 8 + (index % 5) * 5,
+  duration: 4.2 + (index % 6) * 0.55,
+  delay: (index % 7) * -0.7,
+  driftX: -36 + (index % 9) * 9,
+  driftY: -28 + (index % 8) * 7,
+  blur: index % 3 === 0 ? 10 : 4,
+  opacity: 0.35 + (index % 4) * 0.12,
+}));
 
 function getIndiaTimeParts(date) {
   const formatter = new Intl.DateTimeFormat('en-CA', {
@@ -411,21 +431,45 @@ function App() {
             ))}
           </div>
 
-          <div className="relative z-10 mx-auto flex min-h-[calc(100vh-5rem)] max-w-6xl flex-col items-center justify-between gap-12">
+          <div className="relative z-10 mx-auto min-h-[calc(100vh-5rem)] max-w-6xl">
             <div className="flex w-full items-start justify-between text-[10px] uppercase tracking-[0.4em] text-white/55">
               <span>Royal Dispatch</span>
               <span>{IS_TEST_MODE ? 'Test Mode' : `India time ${String(indiaTime.hour).padStart(2, '0')}:${String(indiaTime.minute).padStart(2, '0')}`}</span>
             </div>
 
-            <div className="relative flex flex-col items-center text-center">
-              <div className="absolute top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-[#f1ab58]/25 blur-[120px]" />
-              <div className="absolute top-1/2 h-44 w-44 -translate-y-1/2 rounded-full border border-[#f1c68a]/20" />
+            <div className="pointer-events-none absolute left-1/2 top-[48%] w-full max-w-[44rem] -translate-x-1/2 -translate-y-1/2 px-4">
+              <div className="relative min-h-[22rem] overflow-hidden rounded-[40px] border border-white/8 bg-[radial-gradient(circle_at_center,_rgba(255,170,80,0.14),_transparent_22%),linear-gradient(180deg,_rgba(11,16,25,0.7),_rgba(5,8,14,0.35))] md:min-h-[30rem]">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_44%,_rgba(255,126,73,0.22),_transparent_16%),radial-gradient(circle_at_50%_58%,_rgba(41,93,255,0.12),_transparent_28%)]" />
+                <div className="absolute left-1/2 top-1/2 h-[22rem] w-[22rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,_rgba(255,255,255,0.06),_transparent_58%)] blur-2xl md:h-[32rem] md:w-[32rem]" />
+
+                {wormholeAuraRings.map((ring, index) => (
+                  <div
+                    key={ring.size}
+                    className="wormhole-accretion absolute left-1/2 top-1/2 rounded-full"
+                    style={{
+                      width: `min(${ring.size}px, 92vw)`,
+                      height: `min(${Math.round(ring.size * 0.26)}px, 24vw)`,
+                      '--base-rotate': `${index * 22}deg`,
+                      opacity: ring.opacity,
+                      animationDuration: `${ring.duration}s`,
+                      animationDelay: `${ring.delay}s`,
+                      background: `conic-gradient(from ${index * 50}deg, transparent, ${ring.colors})`,
+                      filter: 'blur(10px)',
+                    }}
+                  />
+                ))}
+
+                <div className="absolute left-1/2 top-1/2 h-[15rem] w-[15rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10 bg-[radial-gradient(circle,_rgba(255,255,255,0.18)_0%,_rgba(255,179,97,0.12)_26%,_rgba(14,16,20,0.95)_31%,_rgba(1,1,2,1)_46%,_transparent_47%)] shadow-[0_0_80px_rgba(255,145,72,0.22)] md:h-[24rem] md:w-[24rem]" />
+                <div className="absolute left-1/2 top-1/2 h-[5rem] w-[5rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-black shadow-[0_0_80px_rgba(0,0,0,0.9)] md:h-[8rem] md:w-[8rem]" />
+                <div className="wormhole-lens absolute left-1/2 top-1/2 h-[12rem] w-[12rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/6 md:h-[20rem] md:w-[20rem]" />
+              </div>
             </div>
 
-            <div className="grid w-full max-w-5xl gap-6 md:grid-cols-[1.4fr_1fr]">
-              <div />
-              <div className="flex flex-col gap-6">
+            <div className="absolute bottom-0 left-1/2 flex w-full max-w-md -translate-x-1/2 flex-col items-center gap-6 px-4 pb-4 md:pb-8">
+              <div className="w-full">
                 <CountdownCard countdown={countdown} />
+              </div>
+              <div>
                 <button
                   type="button"
                   onClick={handleStartJourney}
@@ -452,9 +496,6 @@ function App() {
               <div>
                 <p className="text-[10px] uppercase tracking-[0.5em] text-[#f29ba8]">The Birthday Archives</p>
                 <h1 className="mt-3 text-4xl font-semibold tracking-tight text-white md:text-6xl">24 hours, 24 locked messages.</h1>
-                <p className="mt-4 max-w-2xl text-sm leading-7 text-white/70 md:text-base">
-                  The grid stays a clean 6 by 4 dashboard on desktop and collapses on mobile. Each tile becomes available only when the India clock reaches that hour.
-                </p>
               </div>
 
               <div className="rounded-[28px] border border-white/10 bg-white/[0.04] px-5 py-4 backdrop-blur-xl">
@@ -535,7 +576,32 @@ function App() {
                     </div>
                   </div>
 
-                  <div className="flex flex-col justify-center p-8">
+                  <div className="relative flex flex-col justify-center overflow-hidden p-8">
+                    {showMessage && (
+                      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,112,196,0.22),_transparent_35%)]" />
+                        <div className="absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#ff74c8]/15 blur-3xl" />
+                        {pinkMolecules.map((particle) => (
+                          <span
+                            key={particle.id}
+                            className="astrophage-particle absolute rounded-full"
+                            style={{
+                              left: particle.left,
+                              top: particle.top,
+                              width: `${particle.size}px`,
+                              height: `${particle.size}px`,
+                              opacity: particle.opacity,
+                              filter: `blur(${particle.blur}px)`,
+                              animationDuration: `${particle.duration}s`,
+                              animationDelay: `${particle.delay}s`,
+                              '--drift-x': `${particle.driftX}px`,
+                              '--drift-y': `${particle.driftY}px`,
+                            }}
+                          />
+                        ))}
+                      </div>
+                    )}
+
                     {!showMessage ? (
                       <div className="animate-fade-in-up">
                         <p className="text-[10px] uppercase tracking-[0.45em] text-white/45">Her reply</p>
@@ -555,7 +621,7 @@ function App() {
                         </button>
                       </div>
                     ) : (
-                      <div className="animate-bloom text-center">
+                      <div className="animate-bloom relative z-10 text-center">
                         <Sparkles className="mx-auto text-[#ef8b96]" size={24} />
                         <p className="mt-6 text-[10px] uppercase tracking-[0.45em] text-[#ef8b96]">Unlocked message</p>
                         <p className="mt-8 whitespace-pre-line text-2xl leading-relaxed text-white md:text-3xl">{activeItem.msg}</p>
@@ -586,17 +652,17 @@ function App() {
       )}
 
       {currentStage === 'final' && (
-        <section className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(234,111,121,0.14),_transparent_24%),linear-gradient(180deg,_#160d0f_0%,_#090507_58%,_#040304_100%)] px-6 py-12">
+        <section className="final-letter relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(234,111,121,0.14),_transparent_24%),linear-gradient(180deg,_#160d0f_0%,_#090507_58%,_#040304_100%)] px-6 py-12">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.04),_transparent_50%)]" />
           <div className="relative z-10 mx-auto max-w-3xl rounded-[40px] border border-white/10 bg-black/30 p-8 backdrop-blur-xl shadow-[0_30px_120px_rgba(0,0,0,0.5)] md:p-12">
-            <p className="text-center text-[10px] uppercase tracking-[0.6em] text-[#ef8b96]">After the final hour</p>
-            <h1 className="mt-6 text-center text-4xl font-semibold tracking-tight text-white md:text-6xl">Birthday from Yours.</h1>
-            <div className="mt-10 space-y-6 text-base leading-8 text-white/82 md:text-lg">
+            <p className="font-ink text-center text-2xl text-[#ef8b96] md:text-3xl">After the final hour</p>
+            <h1 className="mt-6 text-center text-5xl tracking-tight text-white md:text-4xl">Happy Birthday ~ from Yours Unconditional Lover.</h1>
+            <div className="mt-10 space-y-6 text-2xl leading-relaxed text-white/82 md:text-[2rem]">
               <p>On this day, I do not just celebrate your birthday. I celebrate the person you became.</p>
               <p>Everything you lived through, every choice you made, every moment that shaped you. I may not have been there for those chapters, but I am proud of the woman they created.</p>
               <p>And now I get to be part of your story. That is something I do not take lightly.</p>
               <p>The way you opened up to me, little by little, trusting me, caring for me, letting me see you as you are, means more to me than I can explain.</p>
-              <p className="text-2xl font-medium leading-relaxed text-[#ffd3b6] md:text-3xl">It is not just love. It is something calmer, deeper, and more certain.</p>
+              <p className="text-3xl leading-relaxed text-[#ffd3b6] md:text-4xl">It is not just love. It is something calmer, deeper, and more certain.</p>
               <p>Having you in my life feels like a privilege. Building a life with you feels like something I genuinely want.</p>
               <p>You being in this world, and with me, means everything.</p>
             </div>
@@ -605,7 +671,7 @@ function App() {
               <button
                 type="button"
                 onClick={exportReady ? exportAnswers : undefined}
-                className={`inline-flex items-center gap-3 text-sm uppercase tracking-[0.45em] transition ${exportReady ? 'text-[#ef8b96] hover:text-[#ffd0d6]' : 'cursor-default text-white/28'
+                className={`cursor-pointer inline-flex items-center gap-3 text-2xl transition ${exportReady ? 'text-[#ef8b96] hover:text-[#ffd0d6]' : 'cursor-default text-white/28'
                   }`}
               >
                 Yours soon to be husband
@@ -644,7 +710,7 @@ function App() {
       )}
 
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700&family=Parisienne&display=swap');
 
         :root {
           font-family: 'Manrope', sans-serif;
@@ -655,8 +721,46 @@ function App() {
           font-weight: 400;
         }
 
+        .font-ink {
+          font-family: 'Parisienne', cursive;
+          letter-spacing: 0.02em;
+        }
+
+        .final-letter,
+        .final-letter h1,
+        .final-letter h2,
+        .final-letter h3,
+        .final-letter p,
+        .final-letter button {
+          font-family: 'Parisienne', cursive;
+          letter-spacing: 0.02em;
+        }
+
         .paper-texture {
           background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.15'/%3E%3C/svg%3E");
+        }
+
+        .wormhole-accretion {
+          transform-origin: center;
+          mix-blend-mode: screen;
+          animation: accretionSpin linear infinite;
+        }
+
+        .wormhole-lens {
+          box-shadow:
+            0 0 0 10px rgba(255, 255, 255, 0.02),
+            0 0 90px rgba(255, 141, 74, 0.2),
+            inset 0 0 40px rgba(255, 207, 145, 0.08);
+          animation: lensPulse 6s ease-in-out infinite;
+        }
+
+        .astrophage-particle {
+          background:
+            radial-gradient(circle at 30% 30%, rgba(255,255,255,0.95), rgba(255,173,226,0.95) 26%, rgba(255,105,180,0.75) 55%, rgba(255,105,180,0) 72%);
+          box-shadow:
+            0 0 12px rgba(255, 132, 207, 0.45),
+            0 0 28px rgba(255, 99, 193, 0.22);
+          animation: astrophageFloat ease-in-out infinite;
         }
 
         .animate-fade-in {
@@ -697,6 +801,41 @@ function App() {
             opacity: 1;
             transform: scale(1);
             filter: blur(0);
+          }
+        }
+
+        @keyframes accretionSpin {
+          from {
+            transform: translate(-50%, -50%) rotate(var(--base-rotate)) scale(0.98);
+          }
+          50% {
+            transform: translate(-50%, -50%) rotate(calc(var(--base-rotate) + 180deg)) scale(1.04);
+          }
+          to {
+            transform: translate(-50%, -50%) rotate(calc(var(--base-rotate) + 360deg)) scale(0.98);
+          }
+        }
+
+        @keyframes lensPulse {
+          0%, 100% {
+            transform: translate(-50%, -50%) scale(0.98);
+            opacity: 0.8;
+          }
+          50% {
+            transform: translate(-50%, -50%) scale(1.03);
+            opacity: 1;
+          }
+        }
+
+        @keyframes astrophageFloat {
+          0%, 100% {
+            transform: translate3d(0, 0, 0) scale(0.92);
+          }
+          35% {
+            transform: translate3d(var(--drift-x), calc(var(--drift-y) * -0.55), 0) scale(1.16);
+          }
+          70% {
+            transform: translate3d(calc(var(--drift-x) * -0.45), var(--drift-y), 0) scale(0.98);
           }
         }
       `}</style>
