@@ -2,8 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   ArrowRight,
   Cake,
+  Clover,
   Coffee,
   Download,
+  HeartHandshake,
   Heart,
   Lock,
   Moon,
@@ -19,8 +21,10 @@ import './App.css';
 const IS_TEST_MODE = false;
 const INDIA_TIMEZONE = 'Asia/Kolkata';
 const STORAGE_KEY = 'royal-dispatch-answers';
+const NOTE_STORAGE_KEY = 'royal-dispatch-note-for-me';
 const BIRTHDAY_KEY = '2026-04-02';
-const FINAL_KEY = '2026-04-03';
+const TOGETHER_SINCE_KEY = '2025-11-07';
+const MEETING_DAY_KEY = '2026-05-03';
 
 const favoriteThings = [
   'Trekking',
@@ -146,26 +150,27 @@ function getIndiaTimeParts(date) {
   };
 }
 
-function formatCountdown(ms) {
-  if (ms <= 0) {
-    return { d: 0, h: 0, m: 0, s: 0 };
-  }
-
-  return {
-    d: Math.floor(ms / (1000 * 60 * 60 * 24)),
-    h: Math.floor((ms / (1000 * 60 * 60)) % 24),
-    m: Math.floor((ms / (1000 * 60)) % 60),
-    s: Math.floor((ms / 1000) % 60),
-  };
-}
-
 function getAppPhase(dayKey) {
   if (dayKey < BIRTHDAY_KEY) return 'pre_birthday';
-  if (dayKey >= FINAL_KEY) return 'final';
   return 'birthday';
 }
 
-function createAnswerExport(answersMap) {
+function getDaysTogether(dayKey) {
+  const start = new Date(`${TOGETHER_SINCE_KEY}T00:00:00Z`);
+  const today = new Date(`${dayKey}T00:00:00Z`);
+  const diff = today.getTime() - start.getTime();
+  const rawDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+  return Math.max(1, rawDays + 1);
+}
+
+function getDaysUntilMeeting(now = new Date()) {
+  const today = new Date(now);
+  const meetingDay = new Date(`${MEETING_DAY_KEY}T00:00:00`);
+  const diff = meetingDay.getTime() - today.getTime();
+  return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+}
+
+function createAnswerExport(answersMap, noteForMe) {
   const answeredHours = Object.keys(answersMap)
     .map(Number)
     .sort((a, b) => a - b);
@@ -180,30 +185,11 @@ function createAnswerExport(answersMap) {
         })
         .join('\n\n');
 
-  return `Royal Dispatch Answers\nTimezone: ${INDIA_TIMEZONE}\nDate: ${BIRTHDAY_KEY}\n\n${body}\n`;
-}
+  const noteSection = noteForMe.trim()
+    ? `\n\nNote for me\n${noteForMe.trim()}\n`
+    : '\n\nNote for me\nNo note was saved.\n';
 
-function CountdownCard({ countdown }) {
-  const units = [
-    ['Days', countdown.d],
-    ['Hours', countdown.h],
-    ['Minutes', countdown.m],
-    ['Seconds', countdown.s],
-  ];
-
-  return (
-    <div className="rounded-[28px] border border-white/15 bg-black/25 px-6 py-5 backdrop-blur-xl shadow-[0_20px_80px_rgba(0,0,0,0.35)]">
-      <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.45em] text-[#f8d7a7]">Birthday Dashboard</p>
-      <div className="grid grid-cols-4 gap-3 text-center text-white">
-        {units.map(([label, value]) => (
-          <div key={label} className="rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-4">
-            <div className="text-2xl font-semibold tabular-nums md:text-3xl">{value}</div>
-            <div className="mt-1 text-[9px] uppercase tracking-[0.28em] text-white/55">{label}</div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+  return `Royal Dispatch Answers\nTimezone: ${INDIA_TIMEZONE}\nDate: ${BIRTHDAY_KEY}\n\n${body}${noteSection}`;
 }
 
 function App() {
@@ -219,11 +205,16 @@ function App() {
       return {};
     }
   });
+  const [noteForMe, setNoteForMe] = useState(() => {
+    try {
+      return window.localStorage.getItem(NOTE_STORAGE_KEY) ?? '';
+    } catch {
+      return '';
+    }
+  });
   const [input, setInput] = useState('');
   const [activeHour, setActiveHour] = useState(null);
   const [showMessage, setShowMessage] = useState(false);
-  const [countdown, setCountdown] = useState(() => formatCountdown(0));
-
   const itemsRef = useRef([]);
   const requestRef = useRef();
 
@@ -237,14 +228,14 @@ function App() {
       : stage;
   const activeItem = activeHour === null ? null : timeline.find((item) => item.hr === activeHour);
   const answeredCount = Object.keys(answers).length;
-  const exportReady = IS_TEST_MODE || appPhase === 'final';
+  const exportReady = true;
+  const allMomentsUnlocked = !IS_TEST_MODE && appPhase === 'birthday';
+  const daysTogether = getDaysTogether(indiaTime.dayKey);
+  const daysUntilMeeting = getDaysUntilMeeting(realTime);
 
   useEffect(() => {
-    const birthdayStart = new Date('2026-04-01T18:30:00.000Z').getTime();
     const timer = window.setInterval(() => {
-      const now = new Date();
-      setRealTime(now);
-      setCountdown(formatCountdown(birthdayStart - now.getTime()));
+      setRealTime(new Date());
     }, 1000);
 
     return () => window.clearInterval(timer);
@@ -259,12 +250,12 @@ function App() {
   }, [answers]);
 
   useEffect(() => {
-    if (!IS_TEST_MODE && appPhase === 'final' && currentStage !== 'final') {
-      setStage('wormhole');
-      setActiveHour(null);
-      setShowMessage(false);
+    try {
+      window.localStorage.setItem(NOTE_STORAGE_KEY, noteForMe);
+    } catch {
+      // Ignore storage failures and keep the in-memory note.
     }
-  }, [appPhase, currentStage]);
+  }, [noteForMe]);
 
   useEffect(() => {
     if (currentStage !== 'wormhole') {
@@ -371,7 +362,7 @@ function App() {
       return;
     }
 
-    if (currentHour < hour) {
+    if (!allMomentsUnlocked && currentHour < hour) {
       window.alert(`Not yet. This box opens at ${String(hour).padStart(2, '0')}:00 IST.`);
       return;
     }
@@ -399,7 +390,7 @@ function App() {
   };
 
   const exportAnswers = () => {
-    const exportText = createAnswerExport(answers);
+    const exportText = createAnswerExport(answers, noteForMe);
     const blob = new Blob([exportText], { type: 'text/plain;charset=utf-8' });
     const url = window.URL.createObjectURL(blob);
     const anchor = document.createElement('a');
@@ -432,9 +423,18 @@ function App() {
           </div>
 
           <div className="relative z-10 mx-auto min-h-[calc(100vh-5rem)] max-w-6xl">
-            <div className="flex w-full items-start justify-between text-[10px] uppercase tracking-[0.4em] text-white/55">
-              <span>Royal Dispatch</span>
-              <span>{IS_TEST_MODE ? 'Test Mode' : `India time ${String(indiaTime.hour).padStart(2, '0')}:${String(indiaTime.minute).padStart(2, '0')}`}</span>
+            <div className="flex w-full items-start justify-start text-[10px] uppercase tracking-[0.4em] text-white/55">
+              <div className="title-glow relative inline-flex items-center gap-3 rounded-full border border-[#c99a2b]/35 bg-[#8b6a15]/10 px-5 py-3 text-[#f6d06f]">
+                <Sparkles size={14} className="sparkle-orbit shrink-0 text-[#ffe8a8]" />
+                <div className="flex flex-col gap-1">
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.38em]">Royal Dispatch to my wife to be</span>
+                  <span className="text-[10px] uppercase tracking-[0.28em] text-[#ffe9bd]">
+                    {`${daysUntilMeeting} ${daysUntilMeeting === 1 ? 'day' : 'days'}... until this distance disappears.`}
+                  </span>
+                </div>
+                <Clover size={14} className="shrink-0 text-[#c8ff9c]" />
+                <Sparkles size={14} className="sparkle-orbit sparkle-delay shrink-0 text-[#ffe8a8]" />
+              </div>
             </div>
 
             <div className="pointer-events-none absolute left-1/2 top-[48%] w-full max-w-[44rem] -translate-x-1/2 -translate-y-1/2 px-4">
@@ -462,19 +462,21 @@ function App() {
                 <div className="absolute left-1/2 top-1/2 h-[15rem] w-[15rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10 bg-[radial-gradient(circle,_rgba(255,255,255,0.18)_0%,_rgba(255,179,97,0.12)_26%,_rgba(14,16,20,0.95)_31%,_rgba(1,1,2,1)_46%,_transparent_47%)] shadow-[0_0_80px_rgba(255,145,72,0.22)] md:h-[24rem] md:w-[24rem]" />
                 <div className="absolute left-1/2 top-1/2 h-[5rem] w-[5rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-black shadow-[0_0_80px_rgba(0,0,0,0.9)] md:h-[8rem] md:w-[8rem]" />
                 <div className="wormhole-lens absolute left-1/2 top-1/2 h-[12rem] w-[12rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/6 md:h-[20rem] md:w-[20rem]" />
+                <div className="absolute left-1/2 top-1/2 z-10 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center text-center">
+                  <p className="mt-2 font-ink text-4xl leading-none text-[#ffe2bf] drop-shadow-[0_0_18px_rgba(255,180,122,0.35)] md:text-6xl">
+                    {daysTogether}
+                  </p>
+                </div>
               </div>
             </div>
 
             <div className="absolute bottom-0 left-1/2 flex w-full max-w-md -translate-x-1/2 flex-col items-center gap-6 px-4 pb-4 md:pb-8">
-              <div className="w-full">
-                <CountdownCard countdown={countdown} />
-              </div>
               <div>
                 <button
                   type="button"
                   onClick={handleStartJourney}
                   disabled={!IS_TEST_MODE && appPhase !== 'birthday'}
-                  className={`group flex items-center justify-center gap-3 rounded-full border px-6 py-4 text-[11px] font-semibold uppercase tracking-[0.45em] transition-all ${!IS_TEST_MODE && appPhase !== 'birthday'
+                  className={`cursor-pointer group flex items-center justify-center gap-3 rounded-full border px-6 py-4 text-[11px] font-semibold uppercase tracking-[0.45em] transition-all ${!IS_TEST_MODE && appPhase !== 'birthday'
                     ? 'cursor-not-allowed border-white/10 bg-white/[0.04] text-white/35'
                     : 'border-[#f3bf79] bg-[#f3bf79]/8 text-[#fff1dd] hover:bg-[#f3bf79] hover:text-[#2a1405]'
                     }`}
@@ -492,30 +494,21 @@ function App() {
         <section className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(209,81,92,0.18),_transparent_20%),linear-gradient(180deg,_#101521_0%,_#090d14_52%,_#05070b_100%)] px-5 py-10 md:px-8">
           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:32px_32px] opacity-25" />
           <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-8">
-            <header className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <header className="flex flex-col gap-4">
               <div>
                 <p className="text-[10px] uppercase tracking-[0.5em] text-[#f29ba8]">The Birthday Archives</p>
                 <h1 className="mt-3 text-4xl font-semibold tracking-tight text-white md:text-6xl">24 hours, 24 locked messages.</h1>
               </div>
-
-              <div className="rounded-[28px] border border-white/10 bg-white/[0.04] px-5 py-4 backdrop-blur-xl">
-                <p className="text-[9px] uppercase tracking-[0.4em] text-white/45">Live status</p>
-                <div className="mt-3 flex items-end gap-5">
-                  <div>
-                    <div className="text-3xl font-semibold tabular-nums text-white">{String(currentHour).padStart(2, '0')}:00</div>
-                    <div className="text-[10px] uppercase tracking-[0.3em] text-white/45">India hour</div>
-                  </div>
-                  <div>
-                    <div className="text-3xl font-semibold text-[#ffbf9b]">{answeredCount}/24</div>
-                    <div className="text-[10px] uppercase tracking-[0.3em] text-white/45">Answered</div>
-                  </div>
-                </div>
-              </div>
             </header>
+
+            <div className="inline-flex w-fit items-center gap-3 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-white/70 backdrop-blur-xl">
+              <Heart size={14} className="text-[#ffbf9b]" />
+              <span>{answeredCount}/24 answered</span>
+            </div>
 
             <div className="grid gap-3 sm:grid-cols-4 lg:grid-cols-6">
               {timeline.map((item) => {
-                const isReady = currentHour >= item.hr;
+                const isReady = allMomentsUnlocked || currentHour >= item.hr;
                 const isDone = Boolean(answers[item.hr]);
 
                 return (
@@ -547,6 +540,18 @@ function App() {
                   </button>
                 );
               })}
+            </div>
+
+            <div className="mt-8 rounded-[32px] border border-white/10 bg-white/[0.04] p-6 text-center backdrop-blur-xl">
+              <p className="text-[10px] uppercase tracking-[0.45em] text-[#f29ba8]">When the birthday settles</p>
+              <button
+                type="button"
+                onClick={() => setStage('final')}
+                className="cursor-pointer mt-5 inline-flex items-center gap-3 rounded-full border border-[#ef8b96]/40 bg-[#ef8b96]/10 px-6 py-4 text-[11px] font-semibold uppercase tracking-[0.4em] text-[#ffd8dd] transition hover:bg-[#ef8b96]/20"
+              >
+                Read My Last Note
+                <HeartHandshake size={15} />
+              </button>
             </div>
           </div>
 
@@ -655,26 +660,74 @@ function App() {
         <section className="final-letter relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(234,111,121,0.14),_transparent_24%),linear-gradient(180deg,_#160d0f_0%,_#090507_58%,_#040304_100%)] px-6 py-12">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.04),_transparent_50%)]" />
           <div className="relative z-10 mx-auto max-w-3xl rounded-[40px] border border-white/10 bg-black/30 p-8 backdrop-blur-xl shadow-[0_30px_120px_rgba(0,0,0,0.5)] md:p-12">
-            <p className="font-ink text-center text-2xl text-[#ef8b96] md:text-3xl">After the final hour</p>
-            <h1 className="mt-6 text-center text-5xl tracking-tight text-white md:text-4xl">Happy Birthday ~ from Yours Unconditional Lover.</h1>
+            <p className="animate-fade-in-slow font-ink text-center text-2xl text-[#ef8b96] md:text-3xl">After the final hour</p>
             <div className="mt-10 space-y-6 text-2xl leading-relaxed text-white/82 md:text-[2rem]">
-              <p>On this day, I do not just celebrate your birthday. I celebrate the person you became.</p>
-              <p>Everything you lived through, every choice you made, every moment that shaped you. I may not have been there for those chapters, but I am proud of the woman they created.</p>
-              <p>And now I get to be part of your story. That is something I do not take lightly.</p>
-              <p>The way you opened up to me, little by little, trusting me, caring for me, letting me see you as you are, means more to me than I can explain.</p>
-              <p className="text-3xl leading-relaxed text-[#ffd3b6] md:text-4xl">It is not just love. It is something calmer, deeper, and more certain.</p>
-              <p>Having you in my life feels like a privilege. Building a life with you feels like something I genuinely want.</p>
-              <p>You being in this world, and with me, means everything.</p>
+              <p>And just like that… your birthday comes to a close.</p>
+              <p>I’ve been sitting here thinking about your day… and honestly, I just feel grateful.</p>
+              <p>Grateful that you smiled, that you felt loved, and that in some small way, I got to be a part of it.</p>
+              <p>I really hope you enjoyed everything I put together for you. It may have been simple, but it came from a place that’s full of you.</p>
+              <p>Even my family being a small part of it… meant a lot to me.</p>
+              <p>I don’t just want to celebrate you on days like this.</p>
+              <p>I want to make you happy in the everyday moments too… in the little things, the small gestures, the quiet effort.</p>
+              <p>Because having you in my life isn’t something I take lightly.</p>
+              <p>And if this is what “us” feels like… then I want to keep building on it, step by step, day by day.</p>
+              <p>Yesterday was about celebrating you…</p>
+              <p>But for me, it’s always going to be about us.</p>
+              <p>And now that your birthday is over…</p>
+              <p>I keep thinking about your smile, your day, and how you experienced all of this.</p>
+              <p>And honestly, I just feel… full. In a quiet, happy way.</p>
+              <p>I’m really grateful that you enjoyed what I put together for you.</p>
+              <p>It may have been something small from my side… but it carried a lot of you in it.</p>
+              <p>Even my family being a small part of it… meant more to me than you probably realise.</p>
+              <p>I don’t just want to show up like this on special days.</p>
+              <p>I want to keep making you smile in the little moments too… the random days, the quiet ones, the in-between.</p>
+              <p>Because having you in my life… isn’t something I take lightly.</p>
+              <p>And now… there’s something even more real to look forward to.</p>
+              <p>Not just messages… not just calls…</p>
+              <p>But you.</p>
+              <p>In a few days… I don’t have to imagine us anymore.</p>
+              <p>I actually get to be there with you.</p>
+              <p>And that…</p>
+              <p>I think I’m looking forward to the most.</p>
             </div>
 
-            <div className="mt-12 border-t border-white/10 pt-8 text-center">
+            <div className="mt-12 rounded-[30px] border border-white/10 bg-white/[0.05] p-6">
+              <p className="text-center text-2xl text-[#ffd6dd] md:text-3xl">Note for me</p>
+              <textarea
+                value={noteForMe}
+                onChange={(event) => setNoteForMe(event.target.value)}
+                placeholder="If you want, leave me one last note here..."
+                className="mt-5 h-44 w-full rounded-[26px] border border-white/10 bg-black/20 p-5 text-xl leading-relaxed text-white/85 outline-none transition placeholder:text-white/25 focus:border-[#ef8b96] focus:bg-black/30 md:text-2xl"
+              />
+            </div>
+
+            <div className="closing-sequence relative mt-12 overflow-hidden rounded-[34px] border border-[#ffd09b]/20 bg-[linear-gradient(180deg,_rgba(41,24,14,0.55),_rgba(8,6,7,0.72))] p-8 text-center">
+              <div className="sequence-glow absolute inset-0" />
+              <div className="relative z-10">
+                <p className="sequence-echo text-2xl text-white/68 md:text-3xl">But for me, it’s always going to be about us.</p>
+                <p className="sequence-days-us text-4xl text-[#ffe0be] md:text-6xl">{daysTogether} days of us…</p>
+                <p className="sequence-and-now mt-6 text-3xl text-white md:text-5xl">And now…</p>
+                <p className="sequence-distance mt-5 text-xl text-white/72 md:text-3xl">
+                  {daysUntilMeeting} {daysUntilMeeting === 1 ? 'day' : 'days'}… until this distance disappears.
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-12 flex flex-col items-center justify-center gap-5 border-t border-white/10 pt-8 text-center">
+              <button
+                type="button"
+                onClick={() => setStage('grid')}
+                className="inline-flex items-center gap-3 text-2xl text-white/70 transition hover:text-white"
+              >
+                Back to the archive
+              </button>
               <button
                 type="button"
                 onClick={exportReady ? exportAnswers : undefined}
                 className={`cursor-pointer inline-flex items-center gap-3 text-2xl transition ${exportReady ? 'text-[#ef8b96] hover:text-[#ffd0d6]' : 'cursor-default text-white/28'
                   }`}
               >
-                Yours soon to be husband
+                {`Yours soon to be husband in ${daysUntilMeeting} ${daysUntilMeeting === 1 ? 'day' : 'days'}`}
                 {exportReady && <Download size={14} />}
               </button>
             </div>
@@ -746,6 +799,64 @@ function App() {
           animation: accretionSpin linear infinite;
         }
 
+        .title-glow {
+          box-shadow:
+            0 0 24px rgba(240, 190, 74, 0.2),
+            inset 0 0 18px rgba(240, 190, 74, 0.06);
+        }
+
+        .sparkle-orbit {
+          animation: sparkleTwinkle 2.4s ease-in-out infinite;
+        }
+
+        .sparkle-delay {
+          animation-delay: 1.1s;
+        }
+
+        .closing-sequence {
+          box-shadow:
+            0 0 50px rgba(255, 178, 111, 0.08),
+            inset 0 0 30px rgba(255, 211, 154, 0.04);
+          animation: sequenceWarmZoom 10s ease-in-out infinite;
+        }
+
+        .sequence-glow {
+          background:
+            radial-gradient(circle at 50% 30%, rgba(255, 170, 104, 0.2), transparent 34%),
+            radial-gradient(circle at 50% 70%, rgba(255, 111, 174, 0.12), transparent 45%);
+          animation: sequenceGlow 9s ease-in-out infinite;
+        }
+
+        .sequence-echo,
+        .sequence-days-us,
+        .sequence-and-now,
+        .sequence-see-you,
+        .sequence-distance {
+          opacity: 0;
+          transform: translateY(18px) scale(0.98);
+          animation-fill-mode: forwards;
+        }
+
+        .sequence-echo {
+          animation: sequenceEcho 3s ease forwards;
+        }
+
+        .sequence-days-us {
+          animation: sequenceReveal 1.2s ease 2.4s forwards;
+        }
+
+        .sequence-and-now {
+          animation: sequenceReveal 1s ease 4.9s forwards;
+        }
+
+        .sequence-see-you {
+          animation: sequenceRevealStrong 1.4s ease 6.2s forwards;
+        }
+
+        .sequence-distance {
+          animation: sequenceReveal 1.2s ease 7.4s forwards;
+        }
+
         .wormhole-lens {
           box-shadow:
             0 0 0 10px rgba(255, 255, 255, 0.02),
@@ -765,6 +876,10 @@ function App() {
 
         .animate-fade-in {
           animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        .animate-fade-in-slow {
+          animation: fadeIn 1.8s ease-out forwards;
         }
 
         .animate-fade-in-up {
@@ -836,6 +951,79 @@ function App() {
           }
           70% {
             transform: translate3d(calc(var(--drift-x) * -0.45), var(--drift-y), 0) scale(0.98);
+          }
+        }
+
+        @keyframes sparkleTwinkle {
+          0%, 100% {
+            transform: scale(0.9) rotate(0deg);
+            opacity: 0.65;
+            filter: drop-shadow(0 0 0 rgba(255, 232, 168, 0));
+          }
+          50% {
+            transform: scale(1.18) rotate(12deg);
+            opacity: 1;
+            filter: drop-shadow(0 0 10px rgba(255, 232, 168, 0.75));
+          }
+        }
+
+        @keyframes sequenceEcho {
+          0% {
+            opacity: 0;
+            transform: translateY(20px) scale(0.98);
+          }
+          22%,
+          58% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+          100% {
+            opacity: 0;
+            transform: translateY(-10px) scale(0.98);
+          }
+        }
+
+        @keyframes sequenceReveal {
+          from {
+            opacity: 0;
+            transform: translateY(16px) scale(0.98);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+
+        @keyframes sequenceRevealStrong {
+          from {
+            opacity: 0;
+            transform: translateY(22px) scale(0.94);
+            filter: blur(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1.02);
+            filter: blur(0);
+          }
+        }
+
+        @keyframes sequenceWarmZoom {
+          0%, 100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.018);
+          }
+        }
+
+        @keyframes sequenceGlow {
+          0%, 100% {
+            opacity: 0.6;
+            transform: scale(0.98);
+          }
+          50% {
+            opacity: 1;
+            transform: scale(1.03);
           }
         }
       `}</style>
